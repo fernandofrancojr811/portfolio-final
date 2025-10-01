@@ -483,14 +483,7 @@ async function moveMenuItemsHorizontally(direction) {
         return;
     }
 
-    if (isTransitioningHorizontally) {
-        log(LOG_TYPE.WARNING, 'Transitioning');
-
-        return;
-    }
-
-    // Start transitioning
-    isTransitioningHorizontally = true;
+    // Allow immediate subsequent moves without waiting for transition end
 
     // Change active menu item index
     changeActiveMenuItemIndex(direction);
@@ -498,7 +491,7 @@ async function moveMenuItemsHorizontally(direction) {
     // Change style of active menu item
     updateStyleActiveMenuItem();
 
-    await Sfx.playClick();
+    Sfx.playClick();
 
     // Get all menu items
     const menuItems = document.querySelectorAll('.menu-item');
@@ -508,11 +501,7 @@ async function moveMenuItemsHorizontally(direction) {
         menuItem.style.transform = `translateX(${currentTranslateX + (HORIZONTAL_MOVEMENT_AMOUNT * -direction)}px)`;
     });
 
-    // Wait for the transition to complete
-    await waitForAllTransitions(menuItems);
-
-    // End transitioning
-    isTransitioningHorizontally = false;
+    // Do not wait for transition end; enable rapid navigation
 }
 
 async function moveSubMenuItemsVertically(direction) {
@@ -533,19 +522,12 @@ async function moveSubMenuItemsVertically(direction) {
         return;
     }
 
-    if (isTransitioningVertically) {
-        log(LOG_TYPE.WARNING, 'Transitioning');
-
-        return;
-    }
-
-    //Start transitioning
-    isTransitioningVertically = true;
+    // Allow immediate subsequent moves without waiting for transition end
 
     changeActiveSubMenuItemIndex(direction);
     updateActiveSubMenuItemStyle();
 
-    await Sfx.playClick();
+    Sfx.playClick();
 
     //Get selected menu item's children (sub menu items)
     const subMenuItems = Array.from(activeMenuItem.subMenuItemContainer.children);
@@ -565,11 +547,7 @@ async function moveSubMenuItemsVertically(direction) {
         selectionItem.style.transform = `translateY(${transformAmount}px)`;
     });
 
-    // Wait for the transition to complete
-    await waitForAllTransitions(subMenuItems);
-
-    //End transitioning
-    isTransitioningVertically = false;
+    // Do not wait for transition end; enable rapid navigation
 }
 
 /**
@@ -889,6 +867,53 @@ function resetAllData() {
 }
 
 /**
+ * Page transition helper: slide panels in, show loader, then slide out
+ * @param {Function} onMidpoint callback executed when panels are closed (safe to swap views)
+ */
+async function runPageTransition(onMidpoint) {
+    const overlay = document.getElementById('page-transition');
+    const topPanel = document.querySelector('.transition-panel--top');
+    const bottomPanel = document.querySelector('.transition-panel--bottom');
+    const loader = document.getElementById('transition-loader');
+
+    if (!overlay || !topPanel || !bottomPanel || !loader) {
+        if (typeof onMidpoint === 'function') onMidpoint();
+        return;
+    }
+
+    overlay.classList.add('is-active');
+
+    // Close panels (longer duration for visibility)
+    topPanel.style.transition = 'transform 350ms ease-out';
+    bottomPanel.style.transition = 'transform 350ms ease-out';
+    topPanel.style.transform = 'translateY(0)';
+    bottomPanel.style.transform = 'translateY(0)';
+
+    await new Promise(r => setTimeout(r, 370));
+
+    // Show loader
+    loader.style.transition = 'opacity 220ms ease-out';
+    loader.style.opacity = '1';
+
+    // Hold loader a bit longer
+    await new Promise(r => setTimeout(r, 1200));
+
+    // Midpoint action (swap views)
+    if (typeof onMidpoint === 'function') onMidpoint();
+
+    // Hide loader
+    loader.style.opacity = '0';
+    await new Promise(r => setTimeout(r, 200));
+
+    // Open panels
+    topPanel.style.transform = 'translateY(-100%)';
+    bottomPanel.style.transform = 'translateY(100%)';
+    await new Promise(r => setTimeout(r, 370));
+
+    overlay.classList.remove('is-active');
+}
+
+/**
  * Hides the loading banner and shows the main content
  */
 function hideBanner() {
@@ -899,24 +924,19 @@ function hideBanner() {
     // Play click sound
     Sfx.playClick();
     
-    // Hide banner with fade out
-    const banner = document.querySelector('#loading-banner');
-    banner.classList.add('hidden');
-    
-    // Show main content after banner fades out
-    setTimeout(() => {
+    runPageTransition(() => {
+        // Swap views at midpoint
+        const banner = document.querySelector('#loading-banner');
+        if (banner) banner.classList.add('hidden');
         const mainContent = document.querySelector('#main-content');
-        mainContent.classList.add('show');
-        // Initialize main content after it's shown
+        if (mainContent) mainContent.classList.add('show');
         initializeMainContent();
-
-        // Show the back-to-intro floating button
         const backBtn = document.getElementById('back-to-intro-btn');
         if (backBtn) {
             backBtn.style.display = 'block';
             backBtn.tabIndex = 0;
         }
-    }, 500);
+    });
     
     log(LOG_TYPE.INFO, 'Banner hidden, main content shown');
 }
@@ -931,28 +951,19 @@ function showBanner() {
     // Play click sound
     Sfx.playClick();
     
-    // Hide main content
-    const mainContent = document.querySelector('#main-content');
-    if (mainContent) {
-        mainContent.classList.remove('show');
-    }
-    
-    // Show banner
-    const banner = document.querySelector('#loading-banner');
-    if (banner) {
-        banner.classList.remove('hidden');
-    }
-
-    // Hide the back-to-intro floating button and remove focus to avoid Enter triggering it
-    const backBtn = document.getElementById('back-to-intro-btn');
-    if (backBtn) {
-        backBtn.blur();
-        backBtn.style.display = 'none';
-        backBtn.tabIndex = -1;
-    }
-
-    // Ensure body has focus so Enter works on intro
-    try { document.body.focus(); } catch (e) {}
+    runPageTransition(() => {
+        const mainContent = document.querySelector('#main-content');
+        if (mainContent) mainContent.classList.remove('show');
+        const banner = document.querySelector('#loading-banner');
+        if (banner) banner.classList.remove('hidden');
+        const backBtn = document.getElementById('back-to-intro-btn');
+        if (backBtn) {
+            backBtn.blur();
+            backBtn.style.display = 'none';
+            backBtn.tabIndex = -1;
+        }
+        try { document.body.focus(); } catch (e) {}
+    });
     
     log(LOG_TYPE.INFO, 'Banner shown, main content hidden');
 }

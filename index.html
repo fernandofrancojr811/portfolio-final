@@ -124,9 +124,9 @@
                     </div>
                     <div class="checklist-item" data-task="music-discovery">
                         <div class="checklist-checkbox"></div>
-                        <div class="checklist-text" data-translate="music-discovery-task">Discover Music Preferences</div>
+                        <div class="checklist-text" data-translate="music-discovery-task">Discover My Favorite Music!</div>
                     </div>
-                    <div class="checklist-item" data-task="find-city" title="Hint: Hover over the main page profile picture">
+                    <div class="checklist-item" data-task="find-city" title="Hint: Hover over the intro page profile picture">
                         <div class="checklist-checkbox"></div>
                         <div class="checklist-text" data-translate="find-city-task">Find My Favorite City</div>
                         <input type="text" class="city-guess-input" data-translate-placeholder="city-placeholder" placeholder="Type city name..." maxlength="20">
@@ -463,6 +463,20 @@
         
         <!-- CRT Scanline Effect -->
         <div class="crt-effect"></div>
+
+        <!-- Page Transition Overlay (Panels + Loader) -->
+        <div id="page-transition" class="page-transition" aria-hidden="true">
+            <div class="transition-panel transition-panel--top" role="presentation"></div>
+            <div class="transition-panel transition-panel--bottom" role="presentation"></div>
+            <div class="loader" id="transition-loader" role="status" aria-live="polite" aria-label="Loading">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+                <div class="bar4"></div>
+                <div class="bar5"></div>
+                <div class="bar6"></div>
+            </div>
+        </div>
 
         <!-- Back to Intro Floating Button -->
         <button class="back-to-intro-btn" id="back-to-intro-btn" title="Back to intro page">Back to intro page</button>
