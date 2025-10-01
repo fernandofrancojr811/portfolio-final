@@ -33,7 +33,7 @@
                 <div class="banner-content-area">
                     <!-- Profile Photo Section -->
                     <div class="profile-photo-section">
-                        <div class="profile-photo-container">
+                        <div class="profile-photo-container" data-tooltip="This is at the Painted Ladys in my Favorite city San Francisco!">
                             <img src="assets/personalpic.png" alt="Fernando Franco Jr." class="profile-photo">
                             <div class="dither-overlay"></div>
                             <div class="profile-trophy-badge" id="profile-trophy-badge">🏆</div>
@@ -79,7 +79,7 @@
         <!--Navigation Legend-->
         <div class="navigation-legend">
             <div class="legend-top-left">
-                <img class="clock-icon" src="assets/icons/clock.png" alt="Clock">
+                <img class="clock-icon" src="assets/icons/avatars/clock-pfp.png" alt="Clock">
                 <div class="date-time" id="date-time-display"></div>
                 <img src="assets/leaf.png" alt="Leaf the Corgi" class="hidden-corgi" data-corgi-location="background">
             </div>
@@ -102,6 +102,9 @@
                     <div class="legend-line" data-translate="nav-reset-all">U - Reset All Data</div>
                     <!-- <div class="legend-line" data-translate="nav-reset-lang">L - Reset to English</div> -->
                 </div>
+                <div class="scrolling-marquee">
+                    <div class="marquee-text" data-translate="marquee-message">Thank you for visiting! Don't forget to connect with me on LinkedIn! Happy Coding!</div>
+                </div>
             </div>
         </div>
         <!--END - Navigation Legend-->
@@ -123,7 +126,7 @@
                         <div class="checklist-checkbox"></div>
                         <div class="checklist-text" data-translate="music-discovery-task">Discover Music Preferences</div>
                     </div>
-                    <div class="checklist-item" data-task="find-city">
+                    <div class="checklist-item" data-task="find-city" title="Hint: Hover over the main page profile picture">
                         <div class="checklist-checkbox"></div>
                         <div class="checklist-text" data-translate="find-city-task">Find My Favorite City</div>
                         <input type="text" class="city-guess-input" data-translate-placeholder="city-placeholder" placeholder="Type city name..." maxlength="20">
@@ -134,13 +137,13 @@
                         <div class="checklist-checkbox"></div>
                         <div class="checklist-text" data-translate="konami-master-task">Konami Master</div>
                     </div>
-                    <div class="checklist-item" data-task="corgi-hunter" title="Find the hidden corgi in different sections of the portfolio to unlock this achievement">
-                        <div class="checklist-checkbox"></div>
-                        <div class="checklist-text" data-translate="corgi-hunter-task">Corgi Hunter</div>
-                    </div>
                     <div class="checklist-item" data-task="social-butterfly" title="Visit both LinkedIn and GitHub profiles to unlock this achievement">
                         <div class="checklist-checkbox"></div>
                         <div class="checklist-text" data-translate="social-butterfly-task">Social Butterfly</div>
+                    </div>
+                    <div class="checklist-item" data-task="corgi-hunter" title="Find the hidden corgi in different sections of the portfolio to unlock this achievement">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text" data-translate="corgi-hunter-task">Corgi Hunter</div>
                     </div>
                 </div>
             </div>
@@ -460,6 +463,9 @@
         
         <!-- CRT Scanline Effect -->
         <div class="crt-effect"></div>
+
+        <!-- Back to Intro Floating Button -->
+        <button class="back-to-intro-btn" id="back-to-intro-btn" title="Back to intro page">Back to intro page</button>
 
         <!-- Trophy Notification -->
         <div class="trophy-notification" id="trophy-notification">

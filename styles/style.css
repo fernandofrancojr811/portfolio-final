@@ -306,6 +306,27 @@ html {
     gap: 10px;
 }
 
+.back-to-intro-btn {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: 1px solid var(--theme-border, #0096ff);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: "SCE-PS3 Rodin LATIN Regular";
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.back-to-intro-btn:hover {
+    background: rgba(0, 150, 255, 0.2);
+    border-color: #fff;
+}
+
 .navigation-legend:hover {
     opacity: 1;
 }
@@ -317,8 +338,8 @@ html {
 }
 
 .clock-icon {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     margin-right: 8px;
     opacity: 0.7;
 }
@@ -330,7 +351,8 @@ html {
 
 .legend-bottom {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .legend-text {
@@ -338,6 +360,34 @@ html {
     flex-direction: row;
     gap: 15px;
     flex-wrap: wrap;
+}
+
+/* Scrolling Marquee */
+.scrolling-marquee {
+    margin-top: 8px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    height: 16px;
+}
+
+.marquee-text {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--theme-text, #fff);
+    opacity: 0.8;
+    animation: marquee-scroll 15s linear infinite;
+    padding-left: 100%;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 .legend-line {
@@ -1870,7 +1920,8 @@ html {
     height: 200px;
     border: 2px solid #00bfff;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* allow tooltip to render outside bounds */
+    z-index: 10001; /* ensure on top within banner */
     box-shadow: 
         0 0 20px rgba(0, 191, 255, 0.4),
         inset 0 0 20px rgba(0, 191, 255, 0.1),
@@ -1884,6 +1935,54 @@ html {
     object-fit: cover;
     display: block;
     filter: contrast(1.1) brightness(0.9);
+}
+
+/* Hover tooltip on profile, matching checklist hint style */
+.profile-photo-container[data-tooltip] {
+    position: relative;
+    cursor: help;
+    width: 200px;
+    height: 200px;
+}
+
+.profile-photo-container[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-sizing: border-box;
+    transform: none;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #00bfff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    z-index: 10002;
+    border: 1px solid #00bfff;
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.3);
+    max-width: 300px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+    animation: none;
+    transition: none;
+}
+
+.profile-photo-container[data-tooltip]:hover::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #00bfff;
+    z-index: 10002;
+    margin-top: 0;
+    animation: none;
+    transition: none;
 }
 
 .dither-overlay {

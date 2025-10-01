@@ -98,6 +98,9 @@ const translations = {
         'nav-reset-all': 'U - Reset All Data',
         'nav-reset-lang': 'L - Reset to English',
         
+        // Marquee message
+        'marquee-message': 'Thank you for visiting! Don\'t forget to connect with me on LinkedIn! Happy Coding!',
+        
         // Checklist
         'checklist-title': 'ACHIEVEMENT CHECKLIST',
         'create-user-task': 'Create New User Account',
@@ -158,6 +161,9 @@ const translations = {
         'nav-reset': 'R - Reiniciar Lista',
         'nav-reset-all': 'U - Reiniciar Todos los Datos',
         'nav-reset-lang': 'L - Reiniciar a Inglés',
+        
+        // Marquee message
+        'marquee-message': '¡Gracias por visitar! ¡No olvides conectar conmigo en LinkedIn! ¡Feliz Programación!',
         
         // Checklist
         'checklist-title': 'LISTA DE LOGROS',
@@ -220,6 +226,9 @@ const translations = {
         'nav-reset-all': 'U - Réinitialiser Toutes les Données',
         'nav-reset-lang': 'L - Réinitialiser en Anglais',
         
+        // Marquee message
+        'marquee-message': 'Merci de votre visite ! N\'oubliez pas de me connecter sur LinkedIn ! Bon Code !',
+        
         // Checklist
         'checklist-title': 'LISTE DE RÉALISATIONS',
         'create-user-task': 'Créer un Nouveau Compte Utilisateur',
@@ -280,6 +289,9 @@ const translations = {
         'nav-reset': 'R - Liste Zurücksetzen',
         'nav-reset-all': 'U - Alle Daten Zurücksetzen',
         'nav-reset-lang': 'L - Auf Englisch Zurücksetzen',
+        
+        // Marquee message
+        'marquee-message': 'Danke für Ihren Besuch! Vergessen Sie nicht, sich mit mir auf LinkedIn zu vernetzen! Viel Erfolg beim Programmieren!',
         
         // Checklist
         'checklist-title': 'ERFOLGS-CHECKLISTE',
@@ -407,7 +419,13 @@ function addBodyListener() {
                     // Check if food container is visible and handle Enter there
                     foodManager.openCurrentRestaurant();
                 } else {
-                    handleEnterPress();
+                    // Handle Enter key for menu navigation or go back to intro
+                    // If no active menu item, go back to intro page
+                    if (activeMenuItemIndex === -1 || !getActiveMenuItem()) {
+                        showBanner();
+                    } else {
+                        handleEnterPress();
+                    }
                 }
             }
         }
@@ -831,6 +849,9 @@ function resetChecklist() {
     alert('Checklist reset! Press OK to continue.');
 }
 
+// Expose to global scope for inline onclick in index.html
+window.resetChecklist = resetChecklist;
+
 function resetAllData() {
     console.log('Reset all data function called');
     checklistManager.resetChecklist();
@@ -888,9 +909,52 @@ function hideBanner() {
         mainContent.classList.add('show');
         // Initialize main content after it's shown
         initializeMainContent();
+
+        // Show the back-to-intro floating button
+        const backBtn = document.getElementById('back-to-intro-btn');
+        if (backBtn) {
+            backBtn.style.display = 'block';
+            backBtn.tabIndex = 0;
+        }
     }, 500);
     
     log(LOG_TYPE.INFO, 'Banner hidden, main content shown');
+}
+
+/**
+ * Shows the loading banner and hides the main content (go back to intro)
+ */
+function showBanner() {
+    if (isBannerVisible) return;
+    isBannerVisible = true;
+    
+    // Play click sound
+    Sfx.playClick();
+    
+    // Hide main content
+    const mainContent = document.querySelector('#main-content');
+    if (mainContent) {
+        mainContent.classList.remove('show');
+    }
+    
+    // Show banner
+    const banner = document.querySelector('#loading-banner');
+    if (banner) {
+        banner.classList.remove('hidden');
+    }
+
+    // Hide the back-to-intro floating button and remove focus to avoid Enter triggering it
+    const backBtn = document.getElementById('back-to-intro-btn');
+    if (backBtn) {
+        backBtn.blur();
+        backBtn.style.display = 'none';
+        backBtn.tabIndex = -1;
+    }
+
+    // Ensure body has focus so Enter works on intro
+    try { document.body.focus(); } catch (e) {}
+    
+    log(LOG_TYPE.INFO, 'Banner shown, main content hidden');
 }
 
 function getActiveMenuItem() {
@@ -1538,6 +1602,16 @@ const themeManager = new ThemeManager();
 
 // Initialize trophy system
 initializeTrophySystem();
+
+// Back to intro page button handler
+document.addEventListener('DOMContentLoaded', () => {
+    const backBtn = document.getElementById('back-to-intro-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            showBanner();
+        });
+    }
+});
 
 /**
  * Music Video Manager for animated scrolling videos
@@ -2503,6 +2577,21 @@ function addUserToMenu(user) {
  * Load existing users into the menu
  */
 function loadUsersIntoMenu() {
+    // Clear existing dynamically added user sub-menu items to avoid duplicates
+    try {
+        const homeMenuItem = document.querySelector('.menu-item:first-child');
+        const subMenuContainer = homeMenuItem?.querySelector('.sub-menu-item-container');
+        if (subMenuContainer) {
+            const existingUserItems = subMenuContainer.querySelectorAll('.sub-menu-item[data-user-id]');
+            existingUserItems.forEach(item => item.remove());
+            // Reset subMenuItemCount to account for the two static entries (Create New User + Fernando Franco Jr.)
+            const homeMenuData = menuItemsData[0];
+            if (homeMenuData) {
+                homeMenuData.subMenuItemCount = 2;
+            }
+        }
+    } catch (e) {}
+
     const users = userManager.getUsers();
     users.forEach(user => {
         addUserToMenu(user);
@@ -2905,21 +2994,35 @@ initializeLanguageModalEvents();
 initializeThemeModalEvents();
 
 // Initialize main content only after banner is hidden
+let isMainInitialized = false;
 function initializeMainContent() {
-    setupActiveMenuItem();
-    setupActiveSubMenuItems();
-    // Load existing users into the menu
-    loadUsersIntoMenu();
-    // Checklist is already initialized when the page loads
-    // Initialize city guessing game
-    initializeCityGuessingGame();
-    // Initialize corgi hunt
-    initializeCorgiHunt();
-    // Pre-load music and food containers for About Me section
-    preloadAboutMeContainers();
+    if (!isMainInitialized) {
+        setupActiveMenuItem();
+        setupActiveSubMenuItems();
+        // Load existing users into the menu
+        loadUsersIntoMenu();
+        // Checklist is already initialized when the page loads
+        // Initialize city guessing game
+        initializeCityGuessingGame();
+        // Initialize corgi hunt
+        initializeCorgiHunt();
+        // Pre-load music and food containers for About Me section
+        preloadAboutMeContainers();
+        isMainInitialized = true;
+    } else {
+        // Ensure users are synced without duplication when re-entering
+        loadUsersIntoMenu();
+    }
     // Apply current theme colors to all UI elements
     const colors = themeManager.getCurrentThemeColors();
     themeManager.applyThemeColors(colors);
+    
+    // If platinum achieved earlier, ensure star is shown on last created user
+    try {
+        if (localStorage.getItem('portfolio-platinum-achieved') === 'true') {
+            triggerNewUserStar();
+        }
+    } catch (e) {}
 }
 
 /**
@@ -3319,9 +3422,13 @@ function applyTranslations(langCode) {
  * Update banner content with translations
  */
 function updateBannerContent(translation) {
-    // Update all elements with data-translate attributes
+    // Update elements with data-translate attributes,
+    // but skip legend lines to preserve their icons.
     const elementsToTranslate = document.querySelectorAll('[data-translate]');
     elementsToTranslate.forEach(element => {
+        if (element.classList.contains('legend-line')) {
+            return; // handled separately by updateNavigationLegend
+        }
         const key = element.getAttribute('data-translate');
         if (translation[key]) {
             element.textContent = translation[key];
@@ -3401,13 +3508,35 @@ function updateSubMenuItems(translation) {
  * Update navigation legend with translations
  */
 function updateNavigationLegend(translation) {
-    // Update navigation legend elements
+    // Update legend lines based on their data-translate key while preserving icons
     const legendLines = document.querySelectorAll('.legend-line');
-    const legendKeys = ['nav-left-right', 'nav-up-down', 'nav-enter', 'nav-status', 'nav-reset', 'nav-reset-all', 'nav-reset-lang'];
-    
-    legendLines.forEach((line, index) => {
-        if (legendKeys[index] && translation[legendKeys[index]]) {
-            line.textContent = translation[legendKeys[index]];
+    legendLines.forEach((legendLineElement) => {
+        const translateKey = legendLineElement.getAttribute('data-translate');
+        if (!translateKey) return;
+        const translatedText = translation[translateKey];
+        if (!translatedText) return;
+        
+        // Find existing span and replace its text, or replace all text content if no span
+        const textSpan = legendLineElement.querySelector('span');
+        if (textSpan) {
+            textSpan.textContent = translatedText;
+        } else {
+            // If no span exists, replace all text content while preserving other elements
+            const allChildren = Array.from(legendLineElement.children);
+            const nonSpanChildren = allChildren.filter(child => child.tagName !== 'SPAN');
+            
+            // Clear existing content
+            legendLineElement.innerHTML = '';
+            
+            // Re-add non-span elements (like images)
+            nonSpanChildren.forEach(child => {
+                legendLineElement.appendChild(child);
+            });
+            
+            // Add the translated text as a span
+            const newTextSpan = document.createElement('span');
+            newTextSpan.textContent = translatedText;
+            legendLineElement.appendChild(newTextSpan);
         }
     });
 }
@@ -3704,7 +3833,7 @@ function showTrophyNotification() {
     setTimeout(() => {
         trophyNotification.classList.add('show');
         
-        // Hide notification after 4 seconds
+        // Hide notification after 8 seconds
         setTimeout(() => {
             trophyNotification.classList.add('hide');
             
@@ -3712,7 +3841,7 @@ function showTrophyNotification() {
             setTimeout(() => {
                 trophyNotification.classList.remove('show', 'hide');
             }, 600); // Match CSS transition duration
-        }, 4000);
+        }, 8000);
     }, 100);
 }
 
