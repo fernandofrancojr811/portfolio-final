@@ -2150,7 +2150,7 @@ const SUB_MENU_URLS = {
     'research': 'https://cs.ou.edu/~mabdulhak/bookproject.html',
     
     // Network sub-menu items
-    'resume': 'assets/docs/Fernando Franco Jr - 2025 Early Career.pdf',
+    'resume': 'assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf?v=' + Date.now(),
     'linkedin': 'https://www.linkedin.com/in/fernando-franco-jr/',
     'github': 'https://github.com/fernandofrancojr811',
     'internet-browser': null, // No action
