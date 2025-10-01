@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+        <link rel="stylesheet" href="styles/style.css">
+        <link href="https://db.onlinewebfonts.com/c/3c9a33e9913448d684afff5b4b0cc59c?family=SCE-PS3+Rodin+LATIN+Regular" rel="stylesheet">
+        <title>Fernando Franco Jr</title>
+    </head>
+    <body>
+        <!--Loading Banner-->
+        <div id="loading-banner" class="loading-banner">
+            <!-- Font Test -->
+            <div class="font-test" style="position: absolute; top: 10px; right: 10px; font-family: 'DepartureMono', monospace; color: #ff0000; font-size: 12px; z-index: 1000;">Font Test</div>
+            
+            <!-- Video Background -->
+            <!-- <video class="banner-video" autoplay muted loop>
+                <source src="assets/video/intro.mp4" type="video/mp4">
+            </video> -->
+            
+            <!-- Video Overlay -->
+            <div class="banner-overlay"></div>
+            
+            <div class="banner-content">
+                <!-- Windows 95 Title Bar -->
+                <div class="banner-title-bar">
+                    <div class="banner-title-text">
+                        <div class="banner-title-icon">📁</div>
+                        <span>Fernando Franco Jr - Portfolio</span>
+                    </div>
+                    <div class="banner-window-controls">
+                        <div class="banner-window-control">_</div>
+                        <div class="banner-window-control">□</div>
+                        <div class="banner-window-control">×</div>
+                    </div>
+                </div>
+                
+                <!-- Content Area -->
+                <div class="banner-content-area">
+                    <!-- Profile Photo Section -->
+                    <div class="profile-photo-section">
+                        <div class="profile-photo-container">
+                            <img src="assets/personalpic.png" alt="Fernando Franco Jr." class="profile-photo">
+                            <div class="dither-overlay"></div>
+                            <div class="profile-trophy-badge" id="profile-trophy-badge">🏆</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Text Content Section -->
+                    <div class="text-content-section">
+                        <div class="terminal-header">
+                            <div class="terminal-title" data-translate="terminal-title">FERNANDO_FRANCO_JR</div>
+                            <div class="terminal-subtitle" data-translate="terminal-subtitle">AI_ENGINEER & SOFTWARE_DEVELOPER</div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <div class="profile-text">
+                                <p data-translate="profile-text-1">Hello! I'm Fernando Franco Jr., an AI Engineer and Software Developer based in Oklahoma.</p>
+                                <p data-translate="profile-text-2">I'm passionate about building intelligent systems that solve real-world problems. Currently working on AI research and developing innovative software solutions.</p>
+                                <p data-translate="profile-text-3">When I'm not coding, you'll find me exploring new technologies, contributing to open-source projects, and working on research in AI-human interaction.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="continue-prompt">
+                            <div class="blinking-cursor">█</div>
+                            <span data-translate="continue-prompt">PRESS_ENTER_TO_ACCESS_PORTFOLIO</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END - Loading Banner-->
+
+        <!--Status bar-->
+        <div class="status-bar bg-status">
+            <p>
+                Active menu item index: <span id="active-menu-item-index-display"></span>
+            </p>
+            <p>
+                Active sub menu item index: <span id="active-sub-menu-item-index-display"></span>
+            </p>
+        </div>
+        <!--END - Status bar-->
+
+        <!--Navigation Legend-->
+        <div class="navigation-legend">
+            <div class="legend-top-left">
+                <img class="clock-icon" src="assets/icons/clock.png" alt="Clock">
+                <div class="date-time" id="date-time-display"></div>
+                <img src="assets/leaf.png" alt="Leaf the Corgi" class="hidden-corgi" data-corgi-location="background">
+            </div>
+            <div class="legend-bottom">
+                <div class="legend-text">
+                    <div class="legend-line" data-translate="nav-left-right">
+                        <img class="nav-icon" src="assets/icons/keys.png" alt="Arrow Keys">
+                        <span>Navigate Menu</span>
+                    </div>
+                    <!-- <div class="legend-line" data-translate="nav-up-down">
+                        <img class="nav-icon" src="assets/icons/keys.png" alt="Arrow Keys">
+                        <span>Navigate Items</span>
+                    </div> -->
+                    <div class="legend-line" data-translate="nav-enter">
+                        <img class="nav-icon" src="assets/icons/enter.png" alt="Enter Key">
+                        <span>Press Enter to Select</span>
+                    </div>
+                    <!-- <div class="legend-line" data-translate="nav-status">T - Toggle Status Bar</div> -->
+                    <!-- <div class="legend-line" data-translate="nav-reset">R - Reset Checklist</div> -->
+                    <!-- <div class="legend-line" data-translate="nav-reset-all">U - Reset All Data</div> -->
+                    <!-- <div class="legend-line" data-translate="nav-reset-lang">L - Reset to English</div> -->
+                </div>
+            </div>
+        </div>
+        <!--END - Navigation Legend-->
+
+        <!--Game Checklist-->
+        <div class="game-checklist" id="game-checklist">
+            <div class="checklist-header">
+                <img class="checklist-icon" src="assets/icons/Icons.66.png" alt="Achievement">
+                <div class="checklist-title" data-translate="checklist-title">ACHIEVEMENT CHECKLIST</div>
+                <button class="checklist-reset-btn" onclick="resetChecklist()" title="Reset Checklist (R)">↻</button>
+            </div>
+            <div class="checklist-items">
+                <div class="checklist-column">
+                    <div class="checklist-item" data-task="create-user">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text" data-translate="create-user-task">Create New User Account</div>
+                    </div>
+                    <div class="checklist-item" data-task="music-discovery">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text" data-translate="music-discovery-task">Discover Music Preferences</div>
+                    </div>
+                    <div class="checklist-item" data-task="find-city">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text" data-translate="find-city-task">Find My Favorite City</div>
+                        <input type="text" class="city-guess-input" data-translate-placeholder="city-placeholder" placeholder="Type city name..." maxlength="20">
+                    </div>
+                </div>
+                <div class="checklist-column">
+                    <div class="checklist-item" data-task="konami-master" title="Enter the Konami code (↑↑↓↓←→←→BA) to unlock this secret achievement">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text" data-translate="konami-master-task">Konami Master</div>
+                    </div>
+                    <div class="checklist-item" data-task="corgi-hunter" title="Find the hidden corgi in different sections of the portfolio to unlock this achievement">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text" data-translate="corgi-hunter-task">Corgi Hunter</div>
+                    </div>
+                    <div class="checklist-item" data-task="social-butterfly" title="Visit both LinkedIn and GitHub profiles to unlock this achievement">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text" data-translate="social-butterfly-task">Social Butterfly</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END - Game Checklist-->
+
+        <div class="main-container" id="main-content">
+            <div class="video-container">
+                <video src="assets/video/blue.mp4" autoplay muted loop></video>
+            </div>
+            <div class="menu-container">
+                <div class="menu-item">
+                    <div class="menu-item-header">
+                        <img class="menu-item-icon" src="assets/icons/Icons.6.png"></img>
+                        <div class="menu-item-description" data-translate="home">Home</div>
+                    </div>
+                    <div class="sub-menu-item-container">
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.37.png"></img>
+                            <div class="sub-menu-item-header" data-translate="create-user">Create New User</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.9.png"></img>
+                            <div class="sub-menu-item-header" data-translate="fernando-profile">Fernando Franco Jr.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-header">
+                        <img class="menu-item-icon" src="assets/icons/favicon.png"></img>
+                        <div class="menu-item-description" data-translate="about-me">About Me</div>
+                    </div>
+                    <div class="sub-menu-item-container">
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.16.png"></img>
+                            <div class="sub-menu-item-header" data-translate="youtube">Music I Enjoy</div>
+                            <!-- Music Video Container -->
+                            <div class="music-video-container" id="music-video-container">
+                                <div class="music-video-scroll" id="music-video-scroll">
+                                    <div class="music-video-track">
+                                        <!-- Videos will be dynamically added here -->
+                                    </div>
+                                </div>
+                                <div class="music-video-info">
+                                    <div class="music-video-title" id="music-video-title">Loading...</div>
+                                    <div class="music-video-instruction" id="music-video-instruction">Press Enter to view</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/food.png"></img>
+                            <div class="sub-menu-item-header" data-translate="favorite-eats">Favorite Eats</div>
+                            <!-- Food Container -->
+                            <div class="food-container" id="food-container">
+                                <div class="food-scroll" id="food-scroll">
+                                    <div class="food-track">
+                                        <!-- Food items will be dynamically added here -->
+                                    </div>
+                                </div>
+                                <div class="food-info">
+                                    <div class="food-title" id="food-title">Loading...</div>
+                                    <div class="food-instruction" id="food-instruction">Press Enter to visit</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-header">
+                        <img class="menu-item-icon" src="assets/icons/Icons.3.png"></img>
+                        <div class="menu-item-description" data-translate="experience">Experience</div>
+                    </div>
+                    <div class="sub-menu-item-container">
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.3.png"></img>
+                            <div class="sub-menu-item-header" data-translate="ai-engineer">xVector.us - AI Engineer</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.3.png"></img>
+                            <div class="sub-menu-item-header" data-translate="software-engineer">xVector.us - Software Engineer</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.3.png"></img>
+                            <div class="sub-menu-item-header" data-translate="research">Research - AI Human Interaction</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-header">
+                        <img class="menu-item-icon" src="assets/icons/Icons.39.png"></img>
+                        <div class="menu-item-description" data-translate="projects">Projects</div>
+                    </div>
+                    <div class="sub-menu-item-container">
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.39.png"></img>
+                            <div class="sub-menu-item-header" data-translate="overleaf">Overleaf Development</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.39.png"></img>
+                            <div class="sub-menu-item-header" data-translate="calorie-calc">Calorie Calculator</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.39.png"></img>
+                            <div class="sub-menu-item-header" data-translate="ai-bot">AI Bot</div>
+                        </div>
+
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.39.png"></img>
+                            <div class="sub-menu-item-header" data-translate="web-scraper">Web Scraper</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-header">
+                        <img class="menu-item-icon" src="assets/icons/Icons.18.png"></img>
+                        <div class="menu-item-description" data-translate="network">Network</div>
+                    </div>
+                    <div class="sub-menu-item-container">
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/resume.png"/>
+                            <div class="sub-menu-item-header" data-translate="resume">Resume (Press Enter to Access)</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/linkedin.png"/>
+                            <div class="sub-menu-item-header" data-translate="linkedin">LinkedIn</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Github.png"></img>
+                            <div class="sub-menu-item-header" data-translate="github">Github</div>
+                        </div>
+                        <!-- <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.2.png"></img>
+                            <div class="sub-menu-item-header">Internet Browser</div>
+                        </div>
+                         -->
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-header">
+                        <img class="menu-item-icon" src="assets/icons/Icons.35.png"></img>
+                        <div class="menu-item-description" data-translate="settings">Settings</div>
+                    </div>
+                    <div class="sub-menu-item-container">
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/language.png"></img>
+                            <div class="sub-menu-item-header" data-translate="change-language">Change Language</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/theme.png"></img>
+                            <div class="sub-menu-item-header" data-translate="change-theme">Change Theme</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <div class="menu-item-header">
+                        <img class="menu-item-icon" src="assets/icons/Icons.66.png"></img>
+                        <div class="menu-item-description" data-translate="awards">Awards</div>
+                        <img src="assets/leaf.png" alt="Leaf the Corgi" class="hidden-corgi" data-corgi-location="menu">
+                    </div>
+                    <div class="sub-menu-item-container">
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.66.png"></img>
+                            <div class="sub-menu-item-header" data-translate="hsf-scholar">HISPANIC SCHOLARSHIP FUND SCHOLAR (Click Enter to Open)</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.66.png"></img>
+                            <div class="sub-menu-item-header" data-translate="cs-scholar">CS INCLUDES SCHOLAR (Click Enter to Open)</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.66.png"></img>
+                            <div class="sub-menu-item-header" data-translate="boeing-scholar">BOEING SCHOLAR (Click Enter to Open)</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.66.png"></img>
+                            <div class="sub-menu-item-header" data-translate="edward-grisso-scholar">EDWARD GRISSO SCHOLAR</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.66.png"></img>
+                            <div class="sub-menu-item-header" data-translate="loyle-miller-scholar">LOYLE P & VELMA MILLER SCHOLAR</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/Icons.66.png"></img>
+                            <div class="sub-menu-item-header" data-translate="sooner-traditions-scholar">SOONER TRADITIONS SCHOLAR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Create User Modal-->
+        <div class="modal-overlay" id="create-user-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img class="modal-icon" src="assets/icons/Icons.37.png" alt="User">
+                    <div class="modal-title">CREATE NEW USER</div>
+                    <button class="modal-close" id="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="user-form">
+                        <div class="form-group">
+                            <label for="username">Name:</label>
+                            <input type="text" id="username" name="username" required placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Choose Profile Icon:</label>
+                            <div class="icon-selection-grid" id="icon-selection-grid">
+                                <!-- Icons will be populated by JavaScript -->
+                            </div>
+                            <input type="hidden" id="selected-icon" name="selected-icon" value="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="btn-cancel">Cancel</button>
+                    <button type="button" class="btn-create" id="btn-create">Create User</button>
+                </div>
+            </div>
+        </div>
+        <!--END - Create User Modal-->
+
+        <!--Language Selection Modal-->
+        <div class="modal-overlay" id="language-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img class="modal-icon" src="assets/icons/Icons.17.png" alt="Language">
+                    <div class="modal-title">SELECT LANGUAGE</div>
+                    <button class="modal-close" id="language-modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="language-selection-grid" id="language-selection-grid">
+                        <!-- Languages will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="language-btn-cancel">Cancel</button>
+                    <button type="button" class="btn-create" id="language-btn-select">Select Language</button>
+                </div>
+            </div>
+        </div>
+        <!--END - Language Selection Modal-->
+
+        <!--Theme Selection Modal-->
+        <div class="modal-overlay" id="theme-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img class="modal-icon" src="assets/icons/Icons.17.png" alt="Theme">
+                    <div class="modal-title">SELECT THEME</div>
+                    <button class="modal-close" id="theme-modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="theme-selection-grid" id="theme-selection-grid">
+                        <!-- Theme options will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="theme-btn-cancel">Cancel</button>
+                    <button type="button" class="btn-create" id="theme-btn-select">Select Theme</button>
+                </div>
+            </div>
+        </div>
+        <!--END - Theme Selection Modal-->
+
+        <!-- Retro Taskbar -->
+        <div class="retro-taskbar">
+            <div class="taskbar-start-button">
+                <span>📁</span>
+                <span>Start</span>
+            </div>
+            <div class="taskbar-time" id="retro-time-display">
+                <!-- Time will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        
+        <!-- CRT Scanline Effect -->
+        <div class="crt-effect"></div>
+
+        <!-- Trophy Notification -->
+        <div class="trophy-notification" id="trophy-notification">
+            <div class="trophy-glow"></div>
+            <div class="trophy-header">
+                <div class="trophy-icon">🏆</div>
+                <div>
+                    <h3 class="trophy-title">Congratulations!</h3>
+                    <p class="trophy-subtitle">Platinum Trophy Unlocked</p>
+                </div>
+            </div>
+        </div>
+
+        <script src="scripts/main-css.js" type="module"></script>
+    </body>
+</html>
