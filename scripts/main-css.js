@@ -668,7 +668,7 @@ function updateActiveSubMenuItemStyle() {
  * Handle container visibility based on active sub-menu item
  */
 function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
-    if (!musicVideoManager && !foodManager) return;
+    if (!musicVideoManager && !foodManager && !hobbiesManager) return;
     
     // Check if this is the "Music I Enjoy" sub-menu item
     const header = activeSubMenuItem.querySelector('.sub-menu-item-header');
@@ -691,6 +691,14 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         headerText.includes('Lieblingsgerichte')
     );
     
+    // Check if this is the Hobbies/Passions sub-menu item
+    const isHobbiesItem = header && (
+        headerText.includes('Hobbies/Passions') ||
+        headerText.includes('Pasatiempos/Pasiones') ||
+        headerText.includes('Passe-temps/Passions') ||
+        headerText.includes('Hobbys/Leidenschaften')
+    );
+
     // Check if this is the AI Engineer experience item
     const isAIEngineer = header && (
         headerText.includes('AI Engineer') ||
@@ -715,7 +723,7 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         headerText.includes('Forschung')
     );
     
-    log(LOG_TYPE.INFO, `Container visibility check - Header: "${headerText}", isMusic: ${isMusicItem}, isFood: ${isFoodItem}`);
+    log(LOG_TYPE.INFO, `Container visibility check - Header: "${headerText}", isMusic: ${isMusicItem}, isFood: ${isFoodItem}, isHobbies: ${isHobbiesItem}`);
     
     if (isMusicItem) {
         // Show music video container, hide food container
@@ -727,6 +735,10 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             foodManager.hide();
             log(LOG_TYPE.INFO, 'Hiding food container');
         }
+        if (hobbiesManager) {
+            hobbiesManager.hide();
+            log(LOG_TYPE.INFO, 'Hiding hobbies container');
+        }
         experiencePopupManager.hideAI();
     } else if (isFoodItem) {
         // Show food container, hide music video container
@@ -737,6 +749,25 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         if (musicVideoManager) {
             musicVideoManager.hide();
             log(LOG_TYPE.INFO, 'Hiding music video container');
+        }
+        if (hobbiesManager) {
+            hobbiesManager.hide();
+            log(LOG_TYPE.INFO, 'Hiding hobbies container');
+        }
+        experiencePopupManager.hideAI();
+    } else if (isHobbiesItem) {
+        // Show hobbies container, hide others
+        if (hobbiesManager) {
+            hobbiesManager.show();
+            log(LOG_TYPE.INFO, 'Showing hobbies container');
+        }
+        if (musicVideoManager) {
+            musicVideoManager.hide();
+            log(LOG_TYPE.INFO, 'Hiding music video container');
+        }
+        if (foodManager) {
+            foodManager.hide();
+            log(LOG_TYPE.INFO, 'Hiding food container');
         }
         experiencePopupManager.hideAI();
     } else if (isAIEngineer) {
@@ -772,6 +803,10 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             foodManager.hide();
             log(LOG_TYPE.INFO, 'Hiding food container (no match)');
         }
+        if (hobbiesManager) {
+            hobbiesManager.hide();
+            log(LOG_TYPE.INFO, 'Hiding hobbies container (no match)');
+        }
         experiencePopupManager.hideAI();
         experiencePopupManager.hideSE();
         experiencePopupManager.hideResearch();
@@ -782,7 +817,7 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
  * Handle container visibility for About Me menu
  */
 function handleAboutMeContainers() {
-    if (!musicVideoManager && !foodManager) return;
+    if (!musicVideoManager && !foodManager && !hobbiesManager) return;
     
     // Ensure both managers are initialized and loaded
     if (musicVideoManager && !musicVideoManager.videos.length) {
@@ -790,6 +825,16 @@ function handleAboutMeContainers() {
     }
     if (foodManager && !foodManager.restaurants.length) {
         foodManager.loadRestaurants();
+    }
+    // Ensure hobbies are present
+    if (hobbiesManager && !hobbiesManager.hobbies?.length) {
+        // Load current hobby images from assets/hobbies
+        hobbiesManager.setHobbies([
+            { id: 'gym', name: 'Gym & Fitness', thumbnail: 'assets/hobbies/gym.jpg' },
+            { id: 'family', name: 'My Wife', thumbnail: 'assets/hobbies/mywife.JPEG' },
+            { id: 'nutrition', name: 'Realgood.ai', thumbnail: 'assets/hobbies/realgood.png', url: 'https://realgoodai.org' },
+            { id: 'okc-thunder', name: 'OKC Thunder', thumbnail: 'assets/hobbies/thunder.jpeg', url: 'https://www.nba.com/thunder' }
+        ]);
     }
     
     // Get the active sub-menu item to determine which container to show
@@ -2157,6 +2202,156 @@ class FoodManager {
 // Initialize food manager
 const foodManager = new FoodManager();
 
+/**
+ * Hobbies Manager Class - Similar to FoodManager for hobbies/passions
+ */
+class HobbiesManager {
+    constructor() {
+        this.hobbies = [];
+        this.currentIndex = 0;
+        this.isAutoScrolling = false;
+        this.autoScrollInterval = null;
+        this.scrollDuration = 3500;
+        this.container = null;
+        this.scrollElement = null;
+        this.trackElement = null;
+        this.titleElement = null;
+        this.isVisible = false;
+        this.init();
+    }
+
+    init() {
+        this.container = document.getElementById('hobbies-container');
+        this.scrollElement = document.getElementById('hobbies-scroll');
+        this.trackElement = this.scrollElement?.querySelector('.hobbies-track');
+        this.titleElement = document.getElementById('hobbies-title');
+        if (!this.container || !this.scrollElement) {
+            log(LOG_TYPE.WARNING, 'Hobbies container elements not found');
+            return;
+        }
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        if (this.scrollElement) {
+            this.scrollElement.addEventListener('mouseenter', () => this.pauseAutoScroll());
+            this.scrollElement.addEventListener('mouseleave', () => this.resumeAutoScroll());
+        }
+    }
+
+    setHobbies(hobbyItems) {
+        this.hobbies = hobbyItems.map((item, index) => ({
+            id: item.id || `hobby-${index}`,
+            name: item.name || `Hobby ${index + 1}`,
+            thumbnail: item.thumbnail,
+            fallbackThumbnail: item.fallbackThumbnail || `https://via.placeholder.com/276x120/0096ff/FFFFFF?text=Hobby+${index + 1}`,
+            url: item.url || null
+        }));
+        this.renderHobbies();
+        this.updateDisplay();
+    }
+
+    renderHobbies() {
+        if (!this.trackElement) return;
+        this.trackElement.innerHTML = '';
+        this.hobbies.forEach((hobby, index) => {
+            const hobbyItem = document.createElement('div');
+            hobbyItem.className = 'hobby-item';
+            hobbyItem.dataset.index = index;
+            hobbyItem.innerHTML = `
+                <img src="${hobby.thumbnail}" alt="${hobby.name}" class="hobby-thumbnail" onerror="this.src='${hobby.fallbackThumbnail}'">
+                <div class="hobby-overlay">
+                    <div class="hobbies-title-overlay">${hobby.name}</div>
+                </div>
+                <div class="hobby-visit-icon">🌐</div>
+            `;
+            hobbyItem.addEventListener('click', () => {
+                this.currentIndex = index;
+                this.updateDisplay();
+                this.openCurrentHobby();
+            });
+            this.trackElement.appendChild(hobbyItem);
+        });
+    }
+
+    show() {
+        if (this.container) {
+            this.container.classList.add('show');
+            this.isVisible = true;
+            this.startAutoScroll();
+        }
+    }
+
+    hide() {
+        if (this.container) {
+            this.container.classList.remove('show');
+            this.isVisible = false;
+            this.stopAutoScroll();
+        }
+    }
+
+    nextHobby() {
+        if (this.hobbies.length === 0) return;
+        this.currentIndex = (this.currentIndex + 1) % this.hobbies.length;
+        this.updateDisplay();
+    }
+
+    updateDisplay() {
+        if (this.hobbies.length === 0) return;
+        const currentHobby = this.hobbies[this.currentIndex];
+        if (this.trackElement) {
+            const translateX = -this.currentIndex * 276;
+            this.trackElement.style.transform = `translateX(${translateX}px)`;
+        }
+        const hobbyItems = this.trackElement?.querySelectorAll('.hobby-item');
+        hobbyItems?.forEach((item, index) => {
+            item.classList.toggle('active', index === this.currentIndex);
+        });
+        if (this.titleElement) {
+            this.titleElement.textContent = currentHobby.name;
+        }
+    }
+
+    openCurrentHobby() {
+        if (this.hobbies.length === 0) return;
+        const currentHobby = this.hobbies[this.currentIndex];
+        if (currentHobby.url) {
+            Sfx.playClick();
+            window.open(currentHobby.url, '_blank');
+            log(LOG_TYPE.INFO, `Opening hobby: ${currentHobby.name}`);
+        }
+    }
+
+    pauseAutoScroll() {
+        this.stopAutoScroll();
+    }
+
+    resumeAutoScroll() {
+        if (this.isAutoScrolling && this.hobbies.length > 1) {
+            this.startAutoScroll();
+        }
+    }
+
+    startAutoScroll() {
+        if (this.hobbies.length <= 1) return;
+        this.stopAutoScroll();
+        this.autoScrollInterval = setInterval(() => {
+            this.nextHobby();
+        }, this.scrollDuration);
+        this.isAutoScrolling = true;
+    }
+
+    stopAutoScroll() {
+        if (this.autoScrollInterval) {
+            clearInterval(this.autoScrollInterval);
+            this.autoScrollInterval = null;
+        }
+        this.isAutoScrolling = false;
+    }
+}
+
+// Initialize hobbies manager
+const hobbiesManager = new HobbiesManager();
 // Experience popup manager for Experience -> AI Engineer
 class ExperiencePopupManager {
     constructor() {
@@ -2343,6 +2538,15 @@ function handleEnterPress() {
         // Open URL in new tab
         window.open(url, '_blank');
     } else {
+        // If a dynamic container is visible, trigger its open action
+        if (hobbiesManager && hobbiesManager.isVisible) {
+            hobbiesManager.openCurrentHobby();
+            return;
+        }
+        if (foodManager && foodManager.isVisible) {
+            foodManager.openCurrentRestaurant();
+            return;
+        }
         log(LOG_TYPE.INFO, `No URL defined for: ${lookupKey}`);
         // Play click sound even if no action
         Sfx.playClick();
