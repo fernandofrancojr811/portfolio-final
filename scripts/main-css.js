@@ -629,6 +629,10 @@ function updateStyleActiveMenuItem() {
             foodManager.hide();
         }
     }
+
+    // Always refresh sub-menu visuals and related containers for the newly active menu
+    // This ensures Experience popups (e.g., AI Engineer) appear immediately on horizontal navigation
+    updateActiveSubMenuItemStyle();
 }
 
 function updateActiveSubMenuItemStyle() {
@@ -691,6 +695,30 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         headerText.includes('Lieblingsgerichte')
     );
     
+    // Check if this is the AI Engineer experience item
+    const isAIEngineer = header && (
+        headerText.includes('AI Engineer') ||
+        headerText.includes('Ingeniero IA') ||
+        headerText.includes('Ingénieur IA') ||
+        headerText.includes('KI-Ingenieur')
+    );
+    
+    // Check if this is the Software Engineer experience item
+    const isSoftwareEngineer = header && (
+        headerText.includes('Software Engineer') ||
+        headerText.includes('Ingeniero Software') ||
+        headerText.includes('Ingénieur Logiciel') ||
+        headerText.includes('Software-Ingenieur')
+    );
+    
+    // Check if this is the Research experience item
+    const isResearch = header && (
+        headerText.includes('Research') ||
+        headerText.includes('Investigación') ||
+        headerText.includes('Recherche') ||
+        headerText.includes('Forschung')
+    );
+    
     log(LOG_TYPE.INFO, `Container visibility check - Header: "${headerText}", isMusic: ${isMusicItem}, isFood: ${isFoodItem}`);
     
     if (isMusicItem) {
@@ -703,6 +731,7 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             foodManager.hide();
             log(LOG_TYPE.INFO, 'Hiding food container');
         }
+        experiencePopupManager.hideAI();
     } else if (isFoodItem) {
         // Show food container, hide music video container
         if (foodManager) {
@@ -713,6 +742,30 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             musicVideoManager.hide();
             log(LOG_TYPE.INFO, 'Hiding music video container');
         }
+        experiencePopupManager.hideAI();
+    } else if (isAIEngineer) {
+        // Hide About Me containers and show AI experience popup
+        if (musicVideoManager) musicVideoManager.hide();
+        if (foodManager) foodManager.hide();
+        experiencePopupManager.showAI();
+        log(LOG_TYPE.INFO, 'Showing AI Engineer experience popup');
+        experiencePopupManager.hideSE();
+    } else if (isSoftwareEngineer) {
+        // Hide About Me containers and show Software Engineer experience popup
+        if (musicVideoManager) musicVideoManager.hide();
+        if (foodManager) foodManager.hide();
+        experiencePopupManager.showSE();
+        log(LOG_TYPE.INFO, 'Showing Software Engineer experience popup');
+        experiencePopupManager.hideAI();
+        experiencePopupManager.hideResearch();
+    } else if (isResearch) {
+        // Hide About Me containers and show Research experience popup
+        if (musicVideoManager) musicVideoManager.hide();
+        if (foodManager) foodManager.hide();
+        experiencePopupManager.showResearch();
+        log(LOG_TYPE.INFO, 'Showing Research experience popup');
+        experiencePopupManager.hideAI();
+        experiencePopupManager.hideSE();
     } else {
         // Hide both containers
         if (musicVideoManager) {
@@ -723,6 +776,9 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             foodManager.hide();
             log(LOG_TYPE.INFO, 'Hiding food container (no match)');
         }
+        experiencePopupManager.hideAI();
+        experiencePopupManager.hideSE();
+        experiencePopupManager.hideResearch();
     }
 }
 
@@ -2016,6 +2072,65 @@ class FoodManager {
 // Initialize food manager
 const foodManager = new FoodManager();
 
+// Experience popup manager for Experience -> AI Engineer
+class ExperiencePopupManager {
+    constructor() {
+        this.aiContainer = null;
+        this.seContainer = null;
+        this.researchContainer = null;
+    }
+
+    init() {
+        this.aiContainer = document.getElementById('experience-ai-container');
+        this.seContainer = document.getElementById('experience-se-container');
+        this.researchContainer = document.getElementById('experience-research-container');
+    }
+
+    showAI() {
+        if (!this.aiContainer) this.init();
+        if (this.aiContainer) {
+            this.aiContainer.classList.add('show');
+        }
+    }
+
+    hideAI() {
+        if (!this.aiContainer) this.init();
+        if (this.aiContainer) {
+            this.aiContainer.classList.remove('show');
+        }
+    }
+
+    showSE() {
+        if (!this.seContainer) this.init();
+        if (this.seContainer) {
+            this.seContainer.classList.add('show');
+        }
+    }
+
+    hideSE() {
+        if (!this.seContainer) this.init();
+        if (this.seContainer) {
+            this.seContainer.classList.remove('show');
+        }
+    }
+
+    showResearch() {
+        if (!this.researchContainer) this.init();
+        if (this.researchContainer) {
+            this.researchContainer.classList.add('show');
+        }
+    }
+
+    hideResearch() {
+        if (!this.researchContainer) this.init();
+        if (this.researchContainer) {
+            this.researchContainer.classList.remove('show');
+        }
+    }
+}
+
+const experiencePopupManager = new ExperiencePopupManager();
+
 /**
  * URL mapping for sub-menu items
  * Add your URLs here for each sub-menu item
@@ -2030,8 +2145,8 @@ const SUB_MENU_URLS = {
     'change-theme': 'theme-toggle', // Special action to open theme modal
     
     // Experience sub-menu items
-    'ai-engineer': null, // No action
-    'software-engineer': null, // No action
+    'ai-engineer': 'https://xvector.us/',
+    'software-engineer': 'https://xvector.us/',
     'research': 'https://cs.ou.edu/~mabdulhak/bookproject.html',
     
     // Network sub-menu items

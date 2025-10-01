@@ -209,6 +209,13 @@ html {
     padding: 30px;
 }
 
+/* Custom sizing for xVector logo */
+.sub-menu-item-icon[src*="xv-bw.png"]{
+    width: 70px;
+    height: 70px;
+    padding: 25px;
+}
+
 /* Custom styling for About Me favicon icon */
 .menu-item-icon[src*="assets/icons/favicon.png"] {
     width: 70px;
@@ -1019,6 +1026,71 @@ html {
 }
 
 /* END - FOOD CONTAINER */
+
+/* EXPERIENCE CONTAINER */
+.experience-container {
+    position: absolute;
+    left: 100%;
+    top: -50px;
+    width: 340px;
+    max-height: 260px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid var(--theme-border, #0096ff);
+    border-radius: 8px;
+    padding: 12px;
+    margin-left: 20px;
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    box-shadow:
+        0 0 20px rgba(0, 150, 255, 0.4),
+        inset 0 0 20px rgba(0, 150, 255, 0.1);
+    font-family: "SCE-PS3 Rodin LATIN Regular";
+    overflow: hidden;
+}
+
+.experience-container.show {
+    display: flex;
+}
+
+.experience-title {
+    color: var(--theme-primary, #0096ff);
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 150, 255, 0.6);
+    margin-bottom: 6px;
+}
+
+.experience-body {
+    font-size: 11px;
+    color: #ffffff;
+    line-height: 1.5;
+    opacity: 0.95;
+    overflow-y: auto;
+    border-top: 1px solid var(--theme-border, #0096ff);
+    padding-top: 8px;
+}
+
+.experience-body p {
+    margin: 0 0 8px 0;
+}
+
+.experience-subtitle {
+    color: var(--theme-primary, #0096ff);
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 6px;
+}
+
+.experience-list {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.experience-list li {
+    margin-bottom: 6px;
+}
+/* END - EXPERIENCE CONTAINER */
 
 /* CREATE USER MODAL */
 
