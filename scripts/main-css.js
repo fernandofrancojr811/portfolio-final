@@ -80,6 +80,7 @@ const translations = {
         'resume': 'Resume',
         'linkedin': 'LinkedIn',
         'github': 'Github',
+        'contact-me': 'Contact me',
         'youtube': 'Music I Enjoy',
         'favorite-eats': 'Favorite Eats',
         'hsf-scholar': 'HISPANIC SCHOLARSHIP FUND SCHOLAR',
@@ -144,6 +145,7 @@ const translations = {
         'resume': 'Currículum',
         'linkedin': 'LinkedIn',
         'github': 'Github',
+        'contact-me': 'Contáctame',
         'youtube': 'Música que Disfruto',
         'favorite-eats': 'Comidas Favoritas',
         'hsf-scholar': 'BECARIO FONDO DE BECAS HISPANAS',
@@ -208,6 +210,7 @@ const translations = {
         'resume': 'CV',
         'linkedin': 'LinkedIn',
         'github': 'Github',
+        'contact-me': 'Contactez-moi',
         'youtube': 'Musique que J\'aime',
         'favorite-eats': 'Nourriture Préférée',
         'hsf-scholar': 'BOURSIER FONDS DE BOURSES HISPANIQUES',
@@ -272,6 +275,7 @@ const translations = {
         'resume': 'Lebenslauf',
         'linkedin': 'LinkedIn',
         'github': 'Github',
+        'contact-me': 'Kontaktiere mich',
         'youtube': 'Musik die ich mag',
         'favorite-eats': 'Lieblingsessen',
         'hsf-scholar': 'HISPANISCHES STIPENDIENFONDS STIPENDIAT',
@@ -342,9 +346,34 @@ function buildMenuItemsData() {
  * All interactions are handled here
  */
 function addBodyListener() {
+    // Capture Enter at document level to always dismiss the intro banner
+    document.addEventListener('keydown', (event) => {
+        if (isBannerVisible && (event.key === 'Enter' || event.keyCode === 13)) {
+            event.preventDefault();
+            // Prevent this Enter keydown from bubbling to other handlers
+            event.stopPropagation();
+            hideBanner();
+        }
+    }, true);
+
     document.body.addEventListener('keydown', async (event) => {
+        // If a previous handler already handled this event (e.g., banner dismissal), do nothing
+        if (event.defaultPrevented) {
+            return;
+        }
+
         // If any modal is open, suppress global navigation/Enter handling
         if (isAnyModalOpen()) {
+            return;
+        }
+
+        // If user is typing in an input or textarea, do not hijack keys
+        const tag = event.target && event.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA') {
+            return;
+        }
+        // Ignore all key handling while interacting inside the contact form
+        if (event.target && event.target.closest && event.target.closest('#connect-container')) {
             return;
         }
 
@@ -455,10 +484,18 @@ function addBodyListener() {
 
     // Add click handler to restore focus when user clicks anywhere
     document.addEventListener('click', (event) => {
-        // Only restore focus if no interactive element was clicked
-        if (!event.target.closest('button') && !event.target.closest('input') && !event.target.closest('a')) {
-            document.body.focus();
+        // Do not steal focus if clicking interactive/form controls
+        if (
+            event.target.closest('input') ||
+            event.target.closest('textarea') ||
+            event.target.closest('select') ||
+            event.target.closest('button') ||
+            event.target.closest('a') ||
+            event.target.closest('form')
+        ) {
+            return;
         }
+        document.body.focus();
     });
 }
 
@@ -668,7 +705,7 @@ function updateActiveSubMenuItemStyle() {
  * Handle container visibility based on active sub-menu item
  */
 function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
-    if (!musicVideoManager && !foodManager && !hobbiesManager) return;
+    if (!musicVideoManager && !foodManager && !hobbiesManager && typeof connectManager === 'undefined') return;
     
     // Check if this is the "Music I Enjoy" sub-menu item
     const header = activeSubMenuItem.querySelector('.sub-menu-item-header');
@@ -699,6 +736,14 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         headerText.includes('Hobbys/Leidenschaften')
     );
 
+    // Check if this is the Contact sub-menu item
+    const isConnect = header && (
+        headerText.includes('Contact me') ||
+        headerText.includes('Contáctame') ||
+        headerText.includes('Contactez-moi') ||
+        headerText.includes('Kontaktiere mich')
+    );
+    
     // Check if this is the AI Engineer experience item
     const isAIEngineer = header && (
         headerText.includes('AI Engineer') ||
@@ -723,10 +768,10 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         headerText.includes('Forschung')
     );
     
-    log(LOG_TYPE.INFO, `Container visibility check - Header: "${headerText}", isMusic: ${isMusicItem}, isFood: ${isFoodItem}, isHobbies: ${isHobbiesItem}`);
+    log(LOG_TYPE.INFO, `Container visibility check - Header: "${headerText}", isMusic: ${isMusicItem}, isFood: ${isFoodItem}, isHobbies: ${isHobbiesItem}, isConnect: ${isConnect}`);
     
     if (isMusicItem) {
-        // Show music video container, hide food container
+        // Show music video container, hide others
         if (musicVideoManager) {
             musicVideoManager.show();
             log(LOG_TYPE.INFO, 'Showing music video container');
@@ -739,9 +784,10 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             hobbiesManager.hide();
             log(LOG_TYPE.INFO, 'Hiding hobbies container');
         }
+        if (typeof connectManager !== 'undefined') connectManager.hide();
         experiencePopupManager.hideAI();
     } else if (isFoodItem) {
-        // Show food container, hide music video container
+        // Show food container, hide others
         if (foodManager) {
             foodManager.show();
             log(LOG_TYPE.INFO, 'Showing food container');
@@ -754,6 +800,7 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             hobbiesManager.hide();
             log(LOG_TYPE.INFO, 'Hiding hobbies container');
         }
+        if (typeof connectManager !== 'undefined') connectManager.hide();
         experiencePopupManager.hideAI();
     } else if (isHobbiesItem) {
         // Show hobbies container, hide others
@@ -769,7 +816,14 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             foodManager.hide();
             log(LOG_TYPE.INFO, 'Hiding food container');
         }
+        if (typeof connectManager !== 'undefined') connectManager.hide();
         experiencePopupManager.hideAI();
+    } else if (isConnect) {
+        // Do not auto-show; wait for Enter to open
+        if (typeof connectManager !== 'undefined') connectManager.hide();
+        if (musicVideoManager) musicVideoManager.hide();
+        if (foodManager) foodManager.hide();
+        if (hobbiesManager) hobbiesManager.hide();
     } else if (isAIEngineer) {
         // Hide About Me containers and show AI experience popup
         if (musicVideoManager) musicVideoManager.hide();
@@ -777,6 +831,7 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         experiencePopupManager.showAI();
         log(LOG_TYPE.INFO, 'Showing AI Engineer experience popup');
         experiencePopupManager.hideSE();
+        if (typeof connectManager !== 'undefined') connectManager.hide();
     } else if (isSoftwareEngineer) {
         // Hide About Me containers and show Software Engineer experience popup
         if (musicVideoManager) musicVideoManager.hide();
@@ -785,6 +840,7 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         log(LOG_TYPE.INFO, 'Showing Software Engineer experience popup');
         experiencePopupManager.hideAI();
         experiencePopupManager.hideResearch();
+        if (typeof connectManager !== 'undefined') connectManager.hide();
     } else if (isResearch) {
         // Hide About Me containers and show Research experience popup
         if (musicVideoManager) musicVideoManager.hide();
@@ -793,8 +849,9 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         log(LOG_TYPE.INFO, 'Showing Research experience popup');
         experiencePopupManager.hideAI();
         experiencePopupManager.hideSE();
+        if (typeof connectManager !== 'undefined') connectManager.hide();
     } else {
-        // Hide both containers
+        // Hide all containers
         if (musicVideoManager) {
             musicVideoManager.hide();
             log(LOG_TYPE.INFO, 'Hiding music video container (no match)');
@@ -807,6 +864,7 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
             hobbiesManager.hide();
             log(LOG_TYPE.INFO, 'Hiding hobbies container (no match)');
         }
+        if (typeof connectManager !== 'undefined') connectManager.hide();
         experiencePopupManager.hideAI();
         experiencePopupManager.hideSE();
         experiencePopupManager.hideResearch();
@@ -1678,7 +1736,7 @@ class MusicVideoManager {
         this.currentIndex = 0;
         this.isAutoScrolling = false;
         this.autoScrollInterval = null;
-        this.scrollDuration = 3500; // 3.5 seconds
+        this.scrollDuration = 3000; // 3 seconds
         this.container = null;
         this.scrollElement = null;
         this.trackElement = null;
@@ -1949,7 +2007,7 @@ class FoodManager {
         this.currentIndex = 0;
         this.isAutoScrolling = false;
         this.autoScrollInterval = null;
-        this.scrollDuration = 3500; // 3.5 seconds
+        this.scrollDuration = 3000; // 3 seconds
         this.container = null;
         this.scrollElement = null;
         this.trackElement = null;
@@ -2211,7 +2269,7 @@ class HobbiesManager {
         this.currentIndex = 0;
         this.isAutoScrolling = false;
         this.autoScrollInterval = null;
-        this.scrollDuration = 3500;
+        this.scrollDuration = 3000; // 3 seconds
         this.container = null;
         this.scrollElement = null;
         this.trackElement = null;
@@ -2352,6 +2410,171 @@ class HobbiesManager {
 
 // Initialize hobbies manager
 const hobbiesManager = new HobbiesManager();
+
+/**
+ * Connect Manager - handles the contact form container
+ */
+class ConnectManager {
+    constructor() {
+        this.container = document.getElementById('connect-container');
+        this.form = document.getElementById('connect-form');
+        this.nameInput = document.getElementById('connect-name');
+        this.emailInput = document.getElementById('connect-email');
+        this.messageInput = document.getElementById('connect-message');
+        this.cancelBtn = document.getElementById('connect-cancel');
+        this.sendBtn = document.getElementById('connect-send');
+        this.statusEl = document.getElementById('connect-status');
+        this.isVisible = false;
+        this.initEmail();
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        if (this.cancelBtn) {
+            this.cancelBtn.addEventListener('click', () => this.hide());
+        }
+        if (this.form) {
+            this.form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.submit();
+            });
+            // Submit on Enter (except plain Enter in textarea). Support Ctrl/Cmd+Enter from textarea
+            this.form.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const isTextarea = document.activeElement === this.messageInput;
+                    const sendFromTextarea = isTextarea && (e.ctrlKey || e.metaKey);
+                    if (!isTextarea || sendFromTextarea) {
+                        e.preventDefault();
+                        this.submit();
+                    }
+                }
+            });
+        }
+        if (this.sendBtn) {
+            this.sendBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.submit();
+            });
+        }
+    }
+
+    show() {
+        if (this.container) {
+            this.container.classList.add('show');
+            this.isVisible = true;
+            try { this.nameInput?.focus(); } catch (e) {}
+        }
+    }
+
+    hide() {
+        if (this.container) {
+            this.container.classList.remove('show');
+            this.isVisible = false;
+        }
+    }
+
+    setStatus(msg, isError = false) {
+        if (!this.statusEl) return;
+        this.statusEl.textContent = msg || '';
+        this.statusEl.style.color = isError ? '#ff6b6b' : '#00bfff';
+    }
+
+    initEmail() {
+        try {
+            const cfg = window.EMAILJS_CONFIG;
+            if (window.emailjs && cfg && cfg.publicKey) {
+                window.emailjs.init(cfg.publicKey);
+                // Build an absolute URL for the favicon that works in emails
+                // Prefer a provided HTTPS logoUrl if set (production),
+                // otherwise fall back to absolute local origin (may be blocked by some clients)
+                const fallbackFavicon = new URL('/assets/icons/favicon.png', window.location.origin).href;
+                const absoluteFavicon = (cfg.logoUrl && /^https?:\/\//i.test(cfg.logoUrl)) ? cfg.logoUrl : fallbackFavicon;
+                this.emailConfig = { ...cfg, absoluteFavicon };
+            }
+        } catch (e) {
+            // ignore
+        }
+    }
+
+    validate() {
+        const name = this.nameInput?.value.trim();
+        const email = this.emailInput?.value.trim();
+        const message = this.messageInput?.value.trim();
+        if (!name || !email || !message) {
+            this.setStatus('Please fill out all fields.', true);
+            return false;
+        }
+        // Basic email check
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            this.setStatus('Please enter a valid email address.', true);
+            return false;
+        }
+        this.setStatus('');
+        return { name, email, message };
+    }
+
+    async submit() {
+        const data = this.validate();
+        if (!data) return;
+        // Try EmailJS first if configured
+        if (this.emailConfig && window.emailjs) {
+            try {
+                this.setStatus('Sending...', false);
+                Sfx.playClick();
+                // 1) Send notification to you (contact notification template)
+                await window.emailjs.send(
+                    this.emailConfig.serviceId,
+                    this.emailConfig.templateNotifyId,
+                    {
+                        from_name: data.name,
+                        reply_to: data.email,
+                        message: data.message,
+                        logo_url: this.emailConfig.absoluteFavicon,
+                        to_email: 'francofernando77@gmail.com',
+                        to_name: 'Fernando Franco Jr',
+                        site_url: window.location.origin
+                    },
+                    this.emailConfig.publicKey
+                );
+
+                // 2) Send auto-reply to visitor
+                await window.emailjs.send(
+                    this.emailConfig.serviceId,
+                    this.emailConfig.templateId,
+                    {
+                        name: data.name,
+                        to_name: data.name,
+                        your_name: 'Fernando Franco Jr',
+                        website_link: window.location.origin,
+                        to_email: data.email,
+                        reply_to: 'francofernando77@gmail.com',
+                        logo_url: this.emailConfig.absoluteFavicon,
+                        message: data.message
+                    },
+                    this.emailConfig.publicKey
+                );
+                this.setStatus('Message sent! Thank you.', false);
+                this.form.reset();
+                return;
+            } catch (err) {
+                console.error('EmailJS send error:', err);
+                const reason = (err && (err.text || err.message)) ? ` Reason: ${err.text || err.message}` : '';
+                this.setStatus(`Send failed.${reason} Falling back to mail app...`, true);
+            }
+        }
+        // Fallback to mailto link
+        const subject = encodeURIComponent(`Portfolio Contact from ${data.name}`);
+        const body = encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`);
+        const mailto = `mailto:francofernando77@gmail.com?subject=${subject}&body=${body}`;
+        Sfx.playClick();
+        window.location.href = mailto;
+        this.setStatus('Opening your email client...', false);
+    }
+}
+
+// Initialize connect manager
+const connectManager = new ConnectManager();
+
 // Experience popup manager for Experience -> AI Engineer
 class ExperiencePopupManager {
     constructor() {
@@ -2438,6 +2661,8 @@ const SUB_MENU_URLS = {
     'calorie-calc': 'https://github.com/fernandofrancojr811/CalorieTrackerApp',
     'ai-bot': null, // No action
     'web-scraper': 'https://github.com/fernandofrancojr811/fovus',
+
+    
 
     
     // About Me sub-menu items
@@ -2538,6 +2763,11 @@ function handleEnterPress() {
         // Open URL in new tab
         window.open(url, '_blank');
     } else {
+        // If Contact form is focused item, show it on Enter
+        if (typeof connectManager !== 'undefined' && itemText.toLowerCase().includes('contact')) {
+            connectManager.show();
+            return;
+        }
         // If a dynamic container is visible, trigger its open action
         if (hobbiesManager && hobbiesManager.isVisible) {
             hobbiesManager.openCurrentHobby();

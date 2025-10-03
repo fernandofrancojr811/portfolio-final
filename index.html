@@ -275,7 +275,7 @@
                         </div>
                         <div class="sub-menu-item">
                             <img class="sub-menu-item-icon" src="assets/icons/ou-bw.png"></img>
-                            <div class="sub-menu-item-header" data-translate="research">Research - AI Human Interaction (Click Enter to Open Learn More!)</div>
+                            <div class="sub-menu-item-header" data-translate="research">Research - AI Human Interaction (Click Enter to Open & Learn More!)</div>
                             <!-- Experience Info Container: Research (OU) -->
                             <div class="experience-container" id="experience-research-container">
                                 <div class="experience-title">AI–Human Interaction Researcher — University of Oklahoma</div>
@@ -331,6 +331,33 @@
                         <div class="sub-menu-item">
                             <img class="sub-menu-item-icon" src="assets/icons/Github.png"></img>
                             <div class="sub-menu-item-header" data-translate="github">Github</div>
+                        </div>
+                        <div class="sub-menu-item">
+                            <img class="sub-menu-item-icon" src="assets/icons/backup-icons/Icons.4.png"/>
+                            <div class="sub-menu-item-header" data-translate="contact-me">Contact me</div>
+                            <!-- Connect Container -->
+                            <div class="connect-container" id="connect-container">
+                            <div class="connect-header">Send me a message or ask me questions!</div>
+                                <form class="connect-form" id="connect-form" novalidate autocomplete="on">
+                                    <div class="form-row">
+                                        <label for="connect-name">Name</label>
+                                        <input type="text" id="connect-name" name="name" required placeholder="Your name" maxlength="60" autocomplete="name" autocapitalize="words" />
+                                    </div>
+                                    <div class="form-row">
+                                        <label for="connect-email">Email</label>
+                                        <input type="email" id="connect-email" name="email" required placeholder="you@example.com" maxlength="100" autocomplete="email" autocapitalize="off" autocorrect="off" inputmode="email" />
+                                    </div>
+                                    <div class="form-row">
+                                        <label for="connect-message">Message</label>
+                                        <textarea id="connect-message" name="message" required placeholder="Let’s connect! Type your message here..." rows="4" maxlength="1000" spellcheck="true" autocomplete="off"></textarea>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="button" id="connect-cancel">Cancel</button>
+                                        <button type="submit" id="connect-send">Send</button>
+                                    </div>
+                                    <div class="connect-status" id="connect-status" aria-live="polite"></div>
+                                </form>
+                            </div>
                         </div>
                         <!-- <div class="sub-menu-item">
                             <img class="sub-menu-item-icon" src="assets/icons/Icons.2.png"></img>
@@ -509,6 +536,17 @@
             </div>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+        <script>
+            window.EMAILJS_CONFIG = {
+                publicKey: 'voZ5GrzqMtL_FrhJi',
+                serviceId: 'service_v74p8t8',
+                templateId: 'template_kik0r8o', // Auto-Reply to visitor
+                templateNotifyId: 'template_aaowzne', // Notification to you
+                // Public HTTPS logo for emails (GitHub Pages)
+                logoUrl: 'https://fernandofrancojr811.github.io/portfolio-final/assets/icons/favicon.png'
+            };
+        </script>
         <script src="scripts/main-css.js" type="module"></script>
     </body>
 </html>
