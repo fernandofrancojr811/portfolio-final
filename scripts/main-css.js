@@ -59,6 +59,7 @@ const translations = {
         // Menu items
         'home': 'Home',
         'about-me': 'About Me',
+        'education': 'Education',
         'settings': 'Settings',
         'experience': 'Experience',
         'projects': 'Projects',
@@ -73,6 +74,8 @@ const translations = {
         'ai-engineer': 'xVector.us - AI Engineer',
         'software-engineer': 'xVector.us - Software Engineer',
         'research': 'Research - AI Human Interaction',
+        'education-ou': 'University of Oklahoma',
+        'education-osuokc': 'OSU-OKC',
         'overleaf': 'Overleaf Development',
         'calorie-calc': 'Calorie Calculator',
         'ai-bot': 'AI Bot',
@@ -124,6 +127,7 @@ const translations = {
         // Menu items
         'home': 'Inicio',
         'about-me': 'Acerca de Mí',
+        'education': 'Educación',
         'settings': 'Configuración',
         'experience': 'Experiencia',
         'projects': 'Proyectos',
@@ -138,6 +142,8 @@ const translations = {
         'ai-engineer': 'xVector.us - Ingeniero IA',
         'software-engineer': 'xVector.us - Ingeniero Software',
         'research': 'Investigación - Interacción Humano-IA',
+        'education-ou': 'Universidad de Oklahoma',
+        'education-osuokc': 'OSU-OKC',
         'overleaf': 'Desarrollo Overleaf',
         'calorie-calc': 'Calculadora de Calorías',
         'ai-bot': 'Bot IA',
@@ -189,6 +195,7 @@ const translations = {
         // Menu items
         'home': 'Accueil',
         'about-me': 'À Propos de Moi',
+        'education': 'Éducation',
         'settings': 'Paramètres',
         'experience': 'Expérience',
         'projects': 'Projets',
@@ -203,6 +210,8 @@ const translations = {
         'ai-engineer': 'xVector.us - Ingénieur IA',
         'software-engineer': 'xVector.us - Ingénieur Logiciel',
         'research': 'Recherche - Interaction Humain-IA',
+        'education-ou': 'Université de l’Oklahoma',
+        'education-osuokc': 'OSU-OKC',
         'overleaf': 'Développement Overleaf',
         'calorie-calc': 'Calculateur de Calories',
         'ai-bot': 'Bot IA',
@@ -254,6 +263,7 @@ const translations = {
         // Menu items
         'home': 'Startseite',
         'about-me': 'Über Mich',
+        'education': 'Ausbildung',
         'settings': 'Einstellungen',
         'experience': 'Erfahrung',
         'projects': 'Projekte',
@@ -268,6 +278,8 @@ const translations = {
         'ai-engineer': 'xVector.us - KI-Ingenieur',
         'software-engineer': 'xVector.us - Software-Ingenieur',
         'research': 'Forschung - KI-Mensch-Interaktion',
+        'education-ou': 'Universität von Oklahoma',
+        'education-osuokc': 'OSU-OKC',
         'overleaf': 'Overleaf Entwicklung',
         'calorie-calc': 'Kalorienrechner',
         'ai-bot': 'KI-Bot',
@@ -350,6 +362,7 @@ function addBodyListener() {
     document.addEventListener('keydown', (event) => {
         if (isBannerVisible && (event.key === 'Enter' || event.keyCode === 13)) {
             event.preventDefault();
+            // Prevent this Enter keydown from bubbling to other handlers
             // Prevent this Enter keydown from bubbling to other handlers
             event.stopPropagation();
             hideBanner();
@@ -768,6 +781,17 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         headerText.includes('Forschung')
     );
     
+    // Education items
+    const isEduOU = header && (
+        headerText.includes('University of Oklahoma') ||
+        headerText.includes('Universidad de Oklahoma') ||
+        headerText.includes('Université de l’') ||
+        headerText.includes('Universität von Oklahoma')
+    );
+    const isEduOSUOKC = header && (
+        headerText.includes('OSU-OKC')
+    );
+    
     log(LOG_TYPE.INFO, `Container visibility check - Header: "${headerText}", isMusic: ${isMusicItem}, isFood: ${isFoodItem}, isHobbies: ${isHobbiesItem}, isConnect: ${isConnect}`);
     
     if (isMusicItem) {
@@ -850,6 +874,26 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         experiencePopupManager.hideAI();
         experiencePopupManager.hideSE();
         if (typeof connectManager !== 'undefined') connectManager.hide();
+    } else if (isEduOU) {
+        if (musicVideoManager) musicVideoManager.hide();
+        if (foodManager) foodManager.hide();
+        if (hobbiesManager) hobbiesManager.hide();
+        if (typeof connectManager !== 'undefined') connectManager.hide();
+        educationPopupManager.showOU();
+        educationPopupManager.hideOSUOKC();
+        experiencePopupManager.hideAI();
+        experiencePopupManager.hideSE();
+        experiencePopupManager.hideResearch();
+    } else if (isEduOSUOKC) {
+        if (musicVideoManager) musicVideoManager.hide();
+        if (foodManager) foodManager.hide();
+        if (hobbiesManager) hobbiesManager.hide();
+        if (typeof connectManager !== 'undefined') connectManager.hide();
+        educationPopupManager.showOSUOKC();
+        educationPopupManager.hideOU();
+        experiencePopupManager.hideAI();
+        experiencePopupManager.hideSE();
+        experiencePopupManager.hideResearch();
     } else {
         // Hide all containers
         if (musicVideoManager) {
@@ -868,6 +912,10 @@ function handleContainerVisibility(activeMenuItem, activeSubMenuItem) {
         experiencePopupManager.hideAI();
         experiencePopupManager.hideSE();
         experiencePopupManager.hideResearch();
+        if (typeof educationPopupManager !== 'undefined') {
+            educationPopupManager.hideOU();
+            educationPopupManager.hideOSUOKC();
+        }
     }
 }
 
@@ -2634,6 +2682,35 @@ class ExperiencePopupManager {
 
 const experiencePopupManager = new ExperiencePopupManager();
 
+class EducationPopupManager {
+    constructor() {
+        this.ouContainer = null;
+        this.osuokcContainer = null;
+    }
+    init() {
+        this.ouContainer = document.getElementById('education-ou-container');
+        this.osuokcContainer = document.getElementById('education-osuokc-container');
+    }
+    showOU() {
+        if (!this.ouContainer) this.init();
+        if (this.ouContainer) this.ouContainer.classList.add('show');
+    }
+    hideOU() {
+        if (!this.ouContainer) this.init();
+        if (this.ouContainer) this.ouContainer.classList.remove('show');
+    }
+    showOSUOKC() {
+        if (!this.osuokcContainer) this.init();
+        if (this.osuokcContainer) this.osuokcContainer.classList.add('show');
+    }
+    hideOSUOKC() {
+        if (!this.osuokcContainer) this.init();
+        if (this.osuokcContainer) this.osuokcContainer.classList.remove('show');
+    }
+}
+
+const educationPopupManager = new EducationPopupManager();
+
 /**
  * URL mapping for sub-menu items
  * Add your URLs here for each sub-menu item
@@ -2651,6 +2728,10 @@ const SUB_MENU_URLS = {
     'ai-engineer': 'https://xvector.us/',
     'software-engineer': 'https://xvector.us/',
     'research': 'https://cs.ou.edu/~mabdulhak/bookproject.html',
+
+    // Education sub-menu items
+    'education-ou': 'https://www.ou.edu/',
+    'education-osuokc': 'https://osuokc.edu/',
     
     // Network sub-menu items
     'resume': 'assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf?v=' + Date.now(),
@@ -3896,7 +3977,7 @@ function updateBannerContent(translation) {
 function updateMenuItems(translation) {
     // Update main menu items
     const menuItems = document.querySelectorAll('.menu-item-description');
-    const menuItemTexts = ['home', 'about-me', 'experience', 'projects', 'network', 'settings', 'awards'];
+    const menuItemTexts = ['home', 'about-me', 'experience', 'education', 'projects', 'network', 'settings', 'awards'];
     
     menuItems.forEach((item, index) => {
         if (menuItemTexts[index]) {
