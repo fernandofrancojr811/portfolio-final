@@ -2,9 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <meta http-equiv="x-ua-compatible" content="IE=edge">
         <link rel="icon" type="image/png" href="assets/icons/favicon.png">
         <link rel="stylesheet" href="styles/style.css">
+        <link rel="stylesheet" href="styles/touch-controls.css">
         <link href="https://db.onlinewebfonts.com/c/3c9a33e9913448d684afff5b4b0cc59c?family=SCE-PS3+Rodin+LATIN+Regular" rel="stylesheet">
         <title>Fernando Franco Jr</title>
     </head>
@@ -13,7 +15,7 @@
         <div id="loading-banner" class="loading-banner">
             
             <!-- Video Background -->
-            <video class="banner-video" autoplay muted loop>
+            <video class="banner-video" autoplay muted loop playsinline preload="metadata">
                 <source src="assets/video/intro-vid.mp4" type="video/mp4">
             </video>
             
@@ -152,7 +154,7 @@
 
         <div class="main-container" id="main-content">
             <div class="video-container">
-                <video src="assets/video/blue.mp4" autoplay muted loop></video>
+                <video src="assets/video/blue.mp4" autoplay muted loop playsinline preload="metadata"></video>
             </div>
             <div class="menu-container">
                 <div class="menu-item">
@@ -570,6 +572,45 @@
             </div>
         </div>
 
+        <!-- Floating thumb controls: left = D-pad, right = Enter -->
+        <div id="touch-ui" role="group" aria-label="Mobile controls">
+            <div class="touch-pad" aria-label="Directional pad" role="group">
+                <button data-act="up" aria-label="Up">▲</button>
+                <div class="row">
+                    <button data-act="left" aria-label="Left">◀</button>
+                    <button data-act="right" aria-label="Right">▶</button>
+                </div>
+                <button data-act="down" aria-label="Down">▼</button>
+            </div>
+
+            <div class="touch-enter" aria-label="Enter / Select" role="group">
+                <button data-act="enter" aria-label="Enter" id="touch-enter-btn">●</button>
+            </div>
+        </div>
+
+        <!-- Mobile help chip -->
+        <div class="nav-help mobile-only" hidden>Use D-pad or swipe</div>
+
+        <!-- Simple Mobile Banner -->
+        <div id="mobile-banner" class="mobile-banner" hidden>
+            <div class="mobile-banner-card">
+                <img class="mobile-banner-photo" src="assets/personalpic.png" alt="Fernando Franco Jr."/>
+                <div class="mobile-banner-title">Fernando Franco Jr.</div>
+                <div class="mobile-banner-sub">AI Engineer · Software Developer</div>
+                <p class="mobile-banner-desc">
+                    I build intelligent, secure software systems and user experiences. Researching AI–human interaction and shipping practical products.
+                </p>
+                <div class="mobile-banner-links">
+                    <a href="https://www.linkedin.com/in/fernando-franco-jr/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://github.com/fernandofrancojr811" target="_blank" rel="noopener">GitHub</a>
+                    <a href="assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf" target="_blank" rel="noopener">Resume</a>
+                </div>
+                <div class="mobile-banner-disclaimer">
+                    Mobile version in progress. Check me out on your desktop for the best experience!
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
         <script>
             window.EMAILJS_CONFIG = {
@@ -582,5 +623,22 @@
             };
         </script>
         <script src="scripts/main-css.js" type="module"></script>
+        <script type="module">
+            import { initMobileControls } from './scripts/mobile-controls.js';
+            initMobileControls({ enableSwipe: true });
+        </script>
+        <script>
+            // Hard fallback: ensure Enter button dismisses intro even if modules fail
+            (function(){
+                try {
+                    var btn = document.getElementById('touch-enter-btn');
+                    if (btn) {
+                        btn.addEventListener('click', function(){
+                            if (typeof window.hideBanner === 'function') window.hideBanner();
+                        }, { passive: true });
+                    }
+                } catch(e) {}
+            })();
+        </script>
     </body>
 </html>

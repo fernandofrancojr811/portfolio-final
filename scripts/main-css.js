@@ -390,6 +390,10 @@ function addBodyListener() {
             return;
         }
 
+        // Prevent mobile browsers from scrolling the page on Arrow/Space keys
+        const arrowKeys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'];
+        if (arrowKeys.includes(event.key)) event.preventDefault();
+
         // Only handle navigation keys if banner is not visible
         if (!isBannerVisible) {
             let direction;
@@ -651,6 +655,14 @@ function updateStatusBar() {
     const activeMenuItem = getActiveMenuItem();
     activeSubMenuItemIndexDisplayElement.innerHTML = activeMenuItem.activeSubMenuItemIndex;
 }
+
+// Expose minimal navigation helpers for mobile controls
+try { window.navigateLeft = () => moveMenuItemsHorizontally(DIRECTION.Left); } catch (e) {}
+try { window.navigateRight = () => moveMenuItemsHorizontally(DIRECTION.Right); } catch (e) {}
+try { window.navigateUp = () => moveSubMenuItemsVertically(DIRECTION.Up); } catch (e) {}
+try { window.navigateDown = () => moveSubMenuItemsVertically(DIRECTION.Down); } catch (e) {}
+try { window.handleEnterPress = handleEnterPress; } catch (e) {}
+try { window.hideBanner = hideBanner; } catch (e) {}
 
 function updateStyleActiveMenuItem() {
     const menuItems = document.querySelectorAll('.menu-item');

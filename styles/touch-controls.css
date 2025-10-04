@@ -1,0 +1,193 @@
+:root{
+  --ui-gap: 10px;
+  --ui-bg: rgba(15,15,15,.35);
+  --ui-blur: blur(8px);
+  --ui-btn-size: 56px;
+  --ui-btn-radius: 14px;
+  --ui-shadow: 0 6px 18px rgba(0,0,0,.28);
+  --ui-bottom-offset: max(16px, env(safe-area-inset-bottom));
+}
+
+#touch-ui {
+  position: fixed;
+  inset: auto 0 0 0;
+  padding-bottom: var(--ui-bottom-offset);
+  pointer-events: none;
+  z-index: 2147483647;
+  display: block;
+}
+
+/* Always honor hidden attribute to fully hide touch UI */
+#touch-ui[hidden] { display: none !important; }
+
+#touch-ui .touch-pad {
+  position: fixed;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: var(--ui-bottom-offset);
+  display: grid;
+  gap: var(--ui-gap);
+  background: var(--ui-bg);
+  -webkit-backdrop-filter: var(--ui-blur);
+  backdrop-filter: var(--ui-blur);
+  padding: 12px;
+  border-radius: 18px;
+  pointer-events: auto;
+  box-shadow: var(--ui-shadow);
+}
+
+#touch-ui .touch-pad .row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ui-gap);
+}
+
+#touch-ui .touch-enter {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: var(--ui-bottom-offset);
+  pointer-events: auto;
+  background: var(--ui-bg);
+  -webkit-backdrop-filter: var(--ui-blur);
+  backdrop-filter: var(--ui-blur);
+  padding: 12px;
+  border-radius: 18px;
+  box-shadow: var(--ui-shadow);
+}
+
+#touch-ui button {
+  width: var(--ui-btn-size);
+  height: var(--ui-btn-size);
+  display: grid;
+  place-items: center;
+  font: 600 18px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #111;
+  background: #fff;
+  border: none;
+  border-radius: var(--ui-btn-radius);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  touch-action: manipulation;
+}
+
+#touch-ui .touch-enter button{
+  width: calc(var(--ui-btn-size) * 1.25);
+  height: calc(var(--ui-btn-size) * 1.25);
+  font-size: 22px;
+}
+
+#touch-ui button:active { transform: scale(.96); }
+
+@media (hover: hover) and (pointer: fine){
+  #touch-ui { display: none !important; }
+}
+
+/* Previously forced-visible on touch; disabled now in favor of explicit JS control */
+
+/* Keep trophy toasts above controls on phones */
+@media (max-width: 768px), (hover: none) and (pointer: coarse){
+  .trophy-notification { bottom: calc(var(--ui-btn-size) * 2.2 + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 380px){
+  :root{ --ui-btn-size: 52px; }
+}
+
+/* Small-height devices: raise controls and slightly shrink buttons */
+@media (max-height: 700px){
+  :root{
+    --ui-btn-size: 52px;
+    --ui-bottom-offset: calc(env(safe-area-inset-bottom) + 28px);
+  }
+  #touch-ui .touch-enter button{ width: calc(var(--ui-btn-size) * 1.15); height: calc(var(--ui-btn-size) * 1.15); }
+}
+
+@media (max-height: 600px){
+  :root{
+    --ui-btn-size: 48px;
+    --ui-bottom-offset: calc(env(safe-area-inset-bottom) + 40px);
+  }
+}
+
+/* Landscape on phones: raise further to avoid browser chrome */
+@media (orientation: landscape) and (hover: none) and (pointer: coarse){
+  :root{
+    --ui-btn-size: 48px;
+    --ui-bottom-offset: calc(env(safe-area-inset-bottom) + 48px);
+  }
+}
+
+/* Mobile-specific tweaks that complement existing styles */
+html { font-size: clamp(13px, 1.4vw, 17px); }
+
+@media (max-width: 768px), (hover: none) and (pointer: coarse){
+  .crt-effect { opacity: .3; }
+  .loader, .page-transition { padding-bottom: env(safe-area-inset-bottom); }
+  .navigation-legend .legend-text { display: none; }
+  .nav-help.mobile-only[hidden]{ display: inline-block !important; }
+}
+
+@media (prefers-reduced-data: reduce){
+  video.bg { display: none; }
+}
+
+@media (max-width: 768px){
+  video.bg { max-height: 50vh; object-fit: cover; }
+  .transition-panels .panel { height: 18vh; }
+}
+
+/* Mobile Banner */
+.mobile-banner {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.75), rgba(0,0,0,.95));
+  z-index: 1000000;
+}
+
+/* Hide mobile banner on desktop pointer devices */
+@media (hover: hover) and (pointer: fine){
+  #mobile-banner { display: none !important; }
+}
+
+.mobile-banner-card{
+  width: min(92vw, 480px);
+  background: rgba(10,10,10,.85);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,191,255,.4);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.45);
+  text-align: center;
+  color: #fff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.mobile-banner-photo{
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgba(0,191,255,.6);
+  margin: 4px auto 10px;
+  display: block;
+}
+
+.mobile-banner-title{ font-weight: 800; font-size: 18px; letter-spacing: .3px; }
+.mobile-banner-sub{ opacity: .9; font-size: 14px; margin-top: 2px; }
+.mobile-banner-desc{ font-size: 13px; line-height: 1.5; opacity: .9; margin: 10px 0 12px; }
+
+.mobile-banner-links{ display: flex; gap: 10px; justify-content: center; margin-bottom: 12px; }
+.mobile-banner-links a{
+  color: #00bfff;
+  text-decoration: none;
+  padding: 6px 10px;
+  border: 1px solid rgba(0,191,255,.5);
+  border-radius: 10px;
+  font-size: 12px;
+}
+.mobile-banner-links a:active{ transform: scale(.98); }
+
+.mobile-banner-disclaimer{ font-size: 12px; opacity: .85; margin-top: 6px; }
+
+
