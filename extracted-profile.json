@@ -1,0 +1,145 @@
+{
+  "profile": {
+    "name": {
+      "primary": "Fernando Franco Jr",
+      "variants": [
+        "Fernando Franco Jr.",
+        "Fernando Franco"
+      ],
+      "sources": [
+        "index.html",
+        "README.md",
+        "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf",
+        "assets/docs/citiCompletionCertificate_14247920_68232175.pdf"
+      ]
+    },
+    "titles": [
+      "AI Engineer",
+      "Software Developer",
+      "Software Engineer",
+      "Secure AI Software Engineer",
+      "AI-Human Interaction Researcher"
+    ],
+    "branding": {
+      "terminal_title": "FERNANDO_FRANCO_JR",
+      "terminal_subtitle": "AI_ENGINEER & SOFTWARE_DEVELOPER",
+      "intro_prompt": "PRESS_ENTER_TO_ACCESS_PORTFOLIO",
+      "mobile_tagline": "I build intelligent, secure software systems and user experiences. Researching AI–human interaction and shipping practical products."
+    },
+    "bio_variants": [
+      "Hello! I'm Fernando Franco Jr., an AI Engineer and Software Developer based in Oklahoma.",
+      "I'm passionate about building intelligent systems that solve real-world problems. Currently working on AI research and developing innovative software solutions.",
+      "When I'm not coding, you'll find me exploring new technologies, contributing to open-source projects, and working on research in AI-human interaction."
+    ],
+    "professional_summary": "Software Engineer with expertise in backend systems, embedded optimization, and cloud security. Experienced in scaling real-time telemetry pipelines, reducing inference latency on constrained hardware, and deploying secure AWS architectures (IAM/KMS/Cognito) for compliance-driven environments.",
+    "location": "Oklahoma",
+    "emails": [
+      "francofernando77@gmail.com",
+      "Fernando.Franco-1@ou.edu"
+    ],
+    "links": {
+      "linkedin": [
+        "https://www.linkedin.com/in/fernando-franco-jr/"
+      ],
+      "github": [
+        "https://github.com/fernandofrancojr811",
+        "https://github.com/fernandofrancojr"
+      ],
+      "resume": [
+        "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf"
+      ],
+      "certificates": [
+        "assets/docs/citiCompletionCertificate_14247920_68232175.pdf"
+      ],
+      "portfolio_related": [
+        "https://legacy.fernandofrancojr.com/assets/icons/favicon.png"
+      ]
+    },
+    "education": [
+      {
+        "school": "University of Oklahoma",
+        "degree": "Bachelor of Science in Computer Science",
+        "dates": "June 2020 - May 2025",
+        "gpa": "3.41/4.0"
+      },
+      {
+        "school": "OSU-OKC",
+        "degree": "Associate's Degree — IT / General Studies",
+        "dates": null
+      }
+    ],
+    "hobbies_and_interests": {
+      "hobbies": [
+        {
+          "name": "Gym & Fitness",
+          "asset": "assets/hobbies/gym.jpg",
+          "url": null
+        },
+        {
+          "name": "My Wife",
+          "asset": "assets/hobbies/mywife.JPEG",
+          "url": null
+        },
+        {
+          "name": "Realgood.ai",
+          "asset": "assets/hobbies/realgood.png",
+          "url": "https://realgoodai.org"
+        },
+        {
+          "name": "OKC Thunder",
+          "asset": "assets/hobbies/thunder.jpeg",
+          "url": "https://www.nba.com/thunder"
+        }
+      ],
+      "music_favorites": [
+        "Tame Impala - Dracula",
+        "The Weekend - Sao Paulo",
+        "Lady Gaga - Love Game",
+        "Wham! - Everything She Wants",
+        "squabble up - Kendrick Lamar",
+        "Childish Gambino - 3005",
+        "Travis Scott - Goosebumps",
+        "Lil Uzi Vert - 20 Min",
+        "Metro Boomin ft. A$AP Rocky - Am I Dreaming"
+      ],
+      "favorite_eats": [
+        "Texas Roadhouse",
+        "The Halls Kitchen",
+        "House of Nanking",
+        "In-N-Out Burger",
+        "Kitchen 324",
+        "The Baked Bear",
+        "Tizos Pops",
+        "Chick-fil-A"
+      ]
+    },
+    "certifications_and_awards": [
+      "CITI Research Certificate",
+      "HISPANIC SCHOLARSHIP FUND SCHOLAR",
+      "CS INCLUDES SCHOLAR",
+      "BOEING SCHOLAR",
+      "EDWARD GRISSO SCHOLAR",
+      "LOYLE P & VELMA MILLER SCHOLAR",
+      "SOONER TRADITIONS SCHOLAR"
+    ],
+    "identity_assets": {
+      "profile_image": "assets/personalpic.png",
+      "leaf_mascot": "assets/leaf.png",
+      "favicon": "assets/icons/favicon.png"
+    }
+  },
+  "metadata": {
+    "source_files": [
+      "index.html",
+      "scripts/main-css.js",
+      "README.md",
+      "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf",
+      "assets/docs/citiCompletionCertificate_14247920_68232175.pdf"
+    ],
+    "conflicts": [
+      "GitHub handle differs between site/runtime and README.",
+      "Name appears as both 'Fernando Franco Jr' and 'Fernando Franco Jr.'.",
+      "Certificate displays 'Fernando Franco' without Jr."
+    ]
+  }
+}

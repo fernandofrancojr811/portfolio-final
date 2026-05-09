@@ -1,0 +1,109 @@
+{
+  "experience": [
+    {
+      "company": "xVector.us",
+      "titles": [
+        "AI Engineer",
+        "Secure AI Software Engineer",
+        "Software Engineer"
+      ],
+      "dates": {
+        "start": "Jul 2025",
+        "end": "Present",
+        "display": "Jul 2025 - Present"
+      },
+      "responsibilities": [
+        "Designed and optimized AI models for deployment on resource-constrained devices.",
+        "Implemented secure authentication, encryption, and access-control measures.",
+        "Built automation/documentation workflows for audit readiness and security monitoring.",
+        "Conducted code reviews, testing, and vulnerability assessments.",
+        "Scaled telemetry pipelines for profiling and automated trade-off tuning.",
+        "Collaborated with hardware/software engineers to improve reliability."
+      ],
+      "technologies": [
+        "C",
+        "C++",
+        "Python",
+        "AWS IAM",
+        "AWS KMS",
+        "AWS Cognito",
+        "AWS CloudWatch"
+      ],
+      "measurable_impacts": [
+        "Reduced token latency by 50%",
+        "Reduced RAM usage by 41%"
+      ],
+      "links": [
+        "https://xvector.us/"
+      ],
+      "source_files": [
+        "index.html",
+        "scripts/main-css.js",
+        "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf"
+      ]
+    },
+    {
+      "company": "Candidate Tools",
+      "titles": [
+        "Software Engineer"
+      ],
+      "dates": {
+        "start": "Apr 2025",
+        "end": "Jul 2025",
+        "display": "Apr 2025 - Jul 2025"
+      },
+      "responsibilities": [
+        "Prototyped MCU device-control software for real-time decision-making.",
+        "Designed React + Node.js telemetry dashboards.",
+        "Built Docker deployment pipelines.",
+        "Designed secure onboarding and license-validation flows."
+      ],
+      "technologies": [
+        "React",
+        "Node.js",
+        "Docker",
+        "MCU platforms"
+      ],
+      "measurable_impacts": [
+        "Reduced debugging time by 18%",
+        "Shortened release cycles by 30%"
+      ],
+      "links": [],
+      "source_files": [
+        "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf"
+      ]
+    },
+    {
+      "company": "University of Oklahoma",
+      "titles": [
+        "AI-Human Interaction Researcher"
+      ],
+      "dates": {
+        "start": null,
+        "end": null,
+        "display": null
+      },
+      "responsibilities": [
+        "Conducted AI-human collaboration research with human test subjects.",
+        "Designed experiments to measure efficiency, usability, and trust.",
+        "Developed AI prototypes for consumer hardware performance improvements.",
+        "Completed research compliance/ethics training and documented findings."
+      ],
+      "technologies": [],
+      "measurable_impacts": [
+        "Described as measurable improvements in speed/resource utilization (no numeric values listed)"
+      ],
+      "links": [
+        "https://cs.ou.edu/~mabdulhak/bookproject.html"
+      ],
+      "source_files": [
+        "index.html",
+        "scripts/main-css.js"
+      ]
+    }
+  ],
+  "conflicts": [
+    "xVector title differs between site ('AI Engineer'/'Software Engineer') and resume ('Secure AI Software Engineer').",
+    "Candidate Tools appears in resume but is not a dedicated visible experience menu item."
+  ]
+}

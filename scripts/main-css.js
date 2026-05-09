@@ -2763,6 +2763,7 @@ const SUB_MENU_URLS = {
     'favorite-eats': null, // No action
     
     // Awards sub-menu items
+    'citi-certificate': 'assets/docs/citiCompletionCertificate_14247920_68232175.pdf?v=' + Date.now(),
     'hsf-scholar': 'https://www.hsf.net/',
     'cs-scholar': 'https://cs-includes.oucreate.com/',
     'boeing-scholar': 'https://www.oklahoman.com/story/business/columns/2019/12/17/boeing-grants-45000-to-support-concurrent-enrollment/60413658007/',
@@ -4032,7 +4033,8 @@ function updateSubMenuItems(translation) {
             'BOEING SCHOLAR': 'boeing-scholar',
             'EDWARD GRISSO SCHOLAR': 'edward-grisso-scholar',
             'LOYLE P & VELMA MILLER SCHOLAR': 'loyle-miller-scholar',
-            'SOONER TRADITIONS SCHOLAR': 'sooner-traditions-scholar'
+            'SOONER TRADITIONS SCHOLAR': 'sooner-traditions-scholar',
+            'CITI Research Certificate (Press Enter to Open)': 'citi-certificate'
         };
         
         const key = textToKey[text];

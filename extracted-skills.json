@@ -1,0 +1,74 @@
+{
+  "skills": {
+    "languages": [
+      "C",
+      "C++",
+      "Python",
+      "Java",
+      "TypeScript",
+      "SQL",
+      "Bash",
+      "Rust (familiar)",
+      "Golang (familiar)"
+    ],
+    "frontend": [
+      "React",
+      "JavaScript",
+      "Data visualization dashboards"
+    ],
+    "backend": [
+      "Node.js",
+      "REST APIs",
+      "Distributed systems"
+    ],
+    "cloud": [
+      "AWS S3",
+      "AWS Lambda",
+      "AWS ECS",
+      "AWS CloudWatch",
+      "AWS Cognito",
+      "AWS KMS"
+    ],
+    "embedded": [
+      "Linux development",
+      "Low-power MCU programming",
+      "Real-time optimization",
+      "Telemetry/logging"
+    ],
+    "defense_aerospace": [],
+    "cybersecurity": [
+      "Authentication",
+      "Encryption",
+      "Access control",
+      "Vulnerability assessments",
+      "HIPAA/FedRAMP-aligned security practices"
+    ],
+    "tools": [
+      "Git",
+      "Jira",
+      "Technical documentation"
+    ],
+    "devops": [
+      "Docker",
+      "GitHub Actions",
+      "GitLab CI/CD"
+    ],
+    "ai_ml": [
+      "AI model optimization",
+      "AI deployment on constrained devices",
+      "Quantized models",
+      "AI-human interaction research"
+    ],
+    "databases": [
+      "SQL"
+    ]
+  },
+  "source_files": [
+    "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf",
+    "index.html"
+  ],
+  "notes": [
+    "No explicit database engine is named.",
+    "No explicit defense/aerospace role label appears in repository text."
+  ]
+}

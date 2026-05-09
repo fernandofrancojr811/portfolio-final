@@ -1,0 +1,128 @@
+{
+  "projects": [
+    {
+      "title": "Overleaf Development",
+      "title_variants": [
+        "Overleaf Update Project"
+      ],
+      "description": "Enhanced document management workflows and collaboration UX in Overleaf.",
+      "stack": [
+        "JavaScript",
+        "React",
+        "Docker"
+      ],
+      "features": [
+        "Document management workflow improvements",
+        "React collaboration component integration",
+        "Usability testing and interface performance tuning"
+      ],
+      "metrics": [
+        "Usability improved by 30%"
+      ],
+      "links": {
+        "repo": "https://github.com/emanuelhix/overleaf-ou",
+        "demo": null,
+        "external": []
+      },
+      "assets": [
+        "assets/icons/Icons.39.png"
+      ],
+      "categories": [
+        "Projects",
+        "University Team Project"
+      ],
+      "source_files": [
+        "index.html",
+        "scripts/main-css.js",
+        "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf"
+      ]
+    },
+    {
+      "title": "Calorie Calculator",
+      "title_variants": [],
+      "description": "Listed as a portfolio project item; detailed project copy is not present in repository text.",
+      "stack": [],
+      "features": [],
+      "metrics": [],
+      "links": {
+        "repo": "https://github.com/fernandofrancojr811/CalorieTrackerApp",
+        "demo": null,
+        "external": []
+      },
+      "assets": [
+        "assets/icons/Icons.39.png"
+      ],
+      "categories": [
+        "Projects"
+      ],
+      "source_files": [
+        "index.html",
+        "scripts/main-css.js"
+      ]
+    },
+    {
+      "title": "Web Scraper",
+      "title_variants": [],
+      "description": "Listed as a portfolio project item; detailed project copy is not present in repository text.",
+      "stack": [],
+      "features": [],
+      "metrics": [],
+      "links": {
+        "repo": "https://github.com/fernandofrancojr811/fovus",
+        "demo": null,
+        "external": []
+      },
+      "assets": [
+        "assets/icons/Icons.39.png"
+      ],
+      "categories": [
+        "Projects"
+      ],
+      "source_files": [
+        "index.html",
+        "scripts/main-css.js"
+      ]
+    },
+    {
+      "title": "Offline GPS + Streaming Dashboard",
+      "title_variants": [],
+      "description": "Real-time GPS streaming pipeline with offline map dashboard support.",
+      "stack": [
+        "Python",
+        "Folium",
+        "aiohttp"
+      ],
+      "features": [
+        "Low-latency GPS updates from embedded devices",
+        "Offline interactive map visualization",
+        "Optimized long-session data handling"
+      ],
+      "metrics": [
+        "Refresh latency reduced by approximately 25%"
+      ],
+      "links": {
+        "repo": null,
+        "demo": null,
+        "external": []
+      },
+      "assets": [],
+      "categories": [
+        "Projects",
+        "Resume-only"
+      ],
+      "source_files": [
+        "assets/docs/Fernando Franco Jr - SWE_Cloud_AI.pdf"
+      ]
+    }
+  ],
+  "project_menu_labels": [
+    "Projects",
+    "Overleaf Development",
+    "Calorie Calculator",
+    "Web Scraper"
+  ],
+  "notes": [
+    "The 'AI Bot' project key exists in translations/URL mappings but is commented out or null-routed in visible menu interactions.",
+    "No dedicated screenshot gallery or per-project markdown/json content exists."
+  ]
+}
